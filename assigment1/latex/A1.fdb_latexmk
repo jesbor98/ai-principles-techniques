@@ -1,5 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1694089726 "c:/Users/amand/Documents/GitHub/ai-principles-techniques/programming-report-exercise/report/Report-Exercise.tex" "Report-Exercise.pdf" "Report-Exercise" 1694089728 0
+["pdflatex"] 1694091506 "c:/Users/amand/Documents/GitHub/ai-principles-techniques/assigment1/latex/A1.tex" "A1.pdf" "A1" 1694091508 0
+  "A1.aux" 1694091508 1524 30e2b29f519c5ee9ffcc99fd9192378c "pdflatex"
+  "A1.out" 1694091508 820 8d332c0c5ca556e31b5efeaed37bb953 "pdflatex"
   "C:/Users/amand/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1678540054 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/amand/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1440.pk" 1694089506 40136 ff2be3edf931db9c4821c2066502fdc0 ""
   "C:/Users/amand/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecrm1000.pk" 1678458136 23808 42f3ed3399a149c1f40d8f3712895743 ""
@@ -79,12 +81,10 @@
   "C:/Users/amand/AppData/Local/Programs/MiKTeX/tex/latex/refcount/refcount.sty" 1576433952 9878 9e94e8fa600d95f9c7731bb21dfb67a4 ""
   "C:/Users/amand/AppData/Local/Programs/MiKTeX/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1657800696 9714 ba3194bd52c8499b3f1e3eb91d409670 ""
   "C:/Users/amand/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
-  "Report-Exercise.aux" 1694089728 1524 30e2b29f519c5ee9ffcc99fd9192378c "pdflatex"
-  "Report-Exercise.out" 1694089728 820 8d332c0c5ca556e31b5efeaed37bb953 "pdflatex"
-  "c:/Users/amand/Documents/GitHub/ai-principles-techniques/programming-report-exercise/report/Report-Exercise.tex" 1694089723 6133 81ac86ab1a1777bbfa6a7e638dce14b3 ""
+  "c:/Users/amand/Documents/GitHub/ai-principles-techniques/assigment1/latex/A1.tex" 1694091503 6133 81ac86ab1a1777bbfa6a7e638dce14b3 ""
   (generated)
-  "Report-Exercise.aux"
-  "Report-Exercise.log"
-  "Report-Exercise.out"
-  "Report-Exercise.pdf"
+  "A1.aux"
+  "A1.log"
+  "A1.out"
+  "A1.pdf"
   (rewritten before read)
