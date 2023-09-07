@@ -1,0 +1,60 @@
+% The format (A4, 10pt, one sided) should NOT be changed. 
+\documentclass[a4paper,10pt,oneside]{article}
+
+% The package babel is loaded set up for Swedish with Swedish 
+% hyphenation,replaces "Contents" with "Innehållsförteckning, 
+% "References" with "Litteraturförteckning", etc.
+\usepackage[swedish]{babel}
+
+\usepackage[T1]{fontenc}
+
+% The package "inputenc" lets us specify what character encoding
+% has been used to save the .tex file. Make sure you set it up
+% with the right character encoding, otherwise ÅÄÖ might look 
+% wrong, or possibly the document won't compile at all.
+\usepackage[utf8]{inputenc}     % Most likely right nowadays, 
+                                % might even be standard and not necessary
+% \usepackage[latin1]{inputenc} % Possibly right if you use Windows
+% Other alternatives are available, but much less likely to be used
+
+% The packages listed below are optional and can be removed if you
+% don't use them 
+\usepackage{graphicx} 
+\usepackage{cite}
+\usepackage{url}
+\usepackage{ifthen}
+\usepackage{listings}	
+
+% These two lines set up options for the listings package and
+% can be removed if you don't use it, or changed if you, e.g, 
+% use another language than Java. 
+% For more information about the listings package see:
+% ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/listings/listings.pdf
+\def \lstlistingname {Kodexempel}
+\lstset{language=Java,tabsize=3,numbers=left,frame=L,floatplacement=hbtp}
+
+
+\usepackage{ifpdf}
+\ifpdf
+	\usepackage[hidelinks]{hyperref}
+\else
+	\usepackage{url}
+\fi
+
+% Ändra inte på titeln
+\title{Programming report exercise}
+
+% Write the name and user namn for all participants in the group here.
+% Separate persons with \and
+\author{Amanda Enhörning \url{s1128126} \and Jessica Borg \url{s1129470}}
+
+\begin{document}
+
+% Do NOT change the title format in any way, especially not to place it on 
+% a separate page. Rememeber that you have a *MAXIMUM* of two pages, including
+% title...
+\maketitle
+
+
+
+\end{document}
