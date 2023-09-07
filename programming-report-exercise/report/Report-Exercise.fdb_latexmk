@@ -1,13 +1,16 @@
 # Fdb version 4
-["pdflatex"] 1694088898 "c:/Users/amand/Documents/GitHub/ai-principles-techniques/programming-report-exercise/report/Report-Exercise.tex" "Report-Exercise.pdf" "Report-Exercise" 1694088900 0
+["pdflatex"] 1694089726 "c:/Users/amand/Documents/GitHub/ai-principles-techniques/programming-report-exercise/report/Report-Exercise.tex" "Report-Exercise.pdf" "Report-Exercise" 1694089728 0
   "C:/Users/amand/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1678540054 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
+  "C:/Users/amand/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1440.pk" 1694089506 40136 ff2be3edf931db9c4821c2066502fdc0 ""
   "C:/Users/amand/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecrm1000.pk" 1678458136 23808 42f3ed3399a149c1f40d8f3712895743 ""
   "C:/Users/amand/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecrm1200.pk" 1678458139 28440 fa16eebb65a390aa491ff425f7393671 ""
   "C:/Users/amand/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecrm1728.pk" 1678458140 42516 ab7623c129ab435ecbbe8510eeaf0ed8 ""
   "C:/Users/amand/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ectt1200.pk" 1678458137 24152 387ded09aabed9bc86b2d644af98f07f ""
   "C:/Users/amand/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1678458063 23175798 b7dcac3ba1837ad36d41fd24077a5dd7 ""
+  "C:/Users/amand/AppData/Local/Programs/MiKTeX/fonts/tfm/jknappen/ec/ecbx1440.tfm" 993061960 3196 0b37fa3083e15c57cfa8c4ff52f2807a ""
   "C:/Users/amand/AppData/Local/Programs/MiKTeX/fonts/tfm/jknappen/ec/ecrm1000.tfm" 993062122 3148 7e594c8240c71e432203f65ab5f95a51 ""
   "C:/Users/amand/AppData/Local/Programs/MiKTeX/fonts/tfm/jknappen/ec/ecrm1200.tfm" 993062126 3152 4850ff0163852b7fab34bd55e1197f28 ""
+  "C:/Users/amand/AppData/Local/Programs/MiKTeX/fonts/tfm/jknappen/ec/ecrm1440.tfm" 993062128 3168 3bd7b08ba4330af81521911744311212 ""
   "C:/Users/amand/AppData/Local/Programs/MiKTeX/fonts/tfm/jknappen/ec/ecrm1728.tfm" 993062128 3168 11457c8185ce67fb79662ba8b03d6db1 ""
   "C:/Users/amand/AppData/Local/Programs/MiKTeX/fonts/tfm/jknappen/ec/ectt1200.tfm" 993062344 1348 c48a0620e07683860afba1730adf9e53 ""
   "C:/Users/amand/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmmi12.tfm" 1136765053 1524 4414a8315f39513458b80dfc63bff03a ""
@@ -76,9 +79,9 @@
   "C:/Users/amand/AppData/Local/Programs/MiKTeX/tex/latex/refcount/refcount.sty" 1576433952 9878 9e94e8fa600d95f9c7731bb21dfb67a4 ""
   "C:/Users/amand/AppData/Local/Programs/MiKTeX/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1657800696 9714 ba3194bd52c8499b3f1e3eb91d409670 ""
   "C:/Users/amand/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
-  "Report-Exercise.aux" 1694088900 654 a7c69fc8ab9910327bdadfab5c7f1914 "pdflatex"
-  "Report-Exercise.out" 1694088900 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "c:/Users/amand/Documents/GitHub/ai-principles-techniques/programming-report-exercise/report/Report-Exercise.tex" 1694088853 2054 a1fab618f98052de7d76fb5c10d86880 ""
+  "Report-Exercise.aux" 1694089728 1524 30e2b29f519c5ee9ffcc99fd9192378c "pdflatex"
+  "Report-Exercise.out" 1694089728 820 8d332c0c5ca556e31b5efeaed37bb953 "pdflatex"
+  "c:/Users/amand/Documents/GitHub/ai-principles-techniques/programming-report-exercise/report/Report-Exercise.tex" 1694089723 6133 81ac86ab1a1777bbfa6a7e638dce14b3 ""
   (generated)
   "Report-Exercise.aux"
   "Report-Exercise.log"
