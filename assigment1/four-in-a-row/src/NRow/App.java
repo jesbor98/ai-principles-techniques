@@ -2,6 +2,8 @@ package NRow;
 
 import NRow.Heuristics.SimpleHeuristic;
 import NRow.Players.HumanPlayer;
+import NRow.Players.MinMaxPlayer;
+import NRow.Players.AlphaBetaPlayer;
 import NRow.Players.PlayerController;
 
 public class App {
@@ -29,8 +31,10 @@ public class App {
         PlayerController human2 = new HumanPlayer(2, n, heuristic2);
 
         //TODO: Implement other PlayerControllers (MinMax, AlphaBeta)
+        PlayerController minMaxPlayer = new MinMaxPlayer(1, n, 3, heuristic1); // Adjust the depth as needed
+        PlayerController alphaBetaPlayer = new AlphaBetaPlayer(2, n, 3, heuristic2); // Adjust the depth as needed
 
-        PlayerController[] players = { human, human2 };
+        PlayerController[] players = { human, human2, minMaxPlayer, alphaBetaPlayer};
 
         return players;
     }
