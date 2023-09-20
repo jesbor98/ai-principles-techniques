@@ -8,9 +8,9 @@ import NRow.Players.PlayerController;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        int gameN = 4;
-        int boardWidth = 7;
-        int boardHeight = 6;
+        int gameN = 5;
+        int boardWidth = 10;
+        int boardHeight = 10;
 
         PlayerController[] players = getPlayers(gameN);
 

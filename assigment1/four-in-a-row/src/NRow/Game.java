@@ -7,6 +7,8 @@ public class Game {
   private PlayerController[] players;
   private Board gameBoard;
   private int winner;
+  private int boardWidth;
+  private int boardHeight;
 
   /**
    * Create a new game
@@ -15,9 +17,11 @@ public class Game {
    * @param boardHeight Height of the board
    * @param players List of players
    */
-  Game(int gameN, int boardWidth, int boardHeight, PlayerController[] players) {
+  public Game(int gameN, int boardWidth, int boardHeight, PlayerController[] players) {
     assert (boardWidth % 2 != 0) : "Board width must be odd!";
     this.gameN = gameN;
+    this.boardWidth = boardWidth; 
+    this.boardHeight = boardHeight; 
     this.players = players;
     this.gameBoard = new Board(boardWidth, boardHeight);
   }
