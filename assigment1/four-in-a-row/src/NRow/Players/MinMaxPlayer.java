@@ -23,7 +23,7 @@ public class MinMaxPlayer extends PlayerController {
         for (int move : availableMoves) {
             Board newBoard = board.getNewBoard(move, playerId);
             TreeNode childNode = new TreeNode(newBoard, move);
-            int value = minValue(childNode, depth - 1);
+            int value = minValue(childNode, depth - 1, playerId);
 
             if (value > bestValue) {
                 bestValue = value;
@@ -34,30 +34,30 @@ public class MinMaxPlayer extends PlayerController {
         return bestMove;
     }
 
-    private int maxValue(TreeNode node, int depth) {
+    private int maxValue(TreeNode node, int depth, int playerId) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return evaluateBoard(playerId, node.getBoard());
+            return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
         }
 
         int bestValue = Integer.MIN_VALUE;
 
         for (TreeNode child : node.getChildren()) {
-            int value = minValue(child, depth - 1);
+            int value = minValue(child, depth - 1, playerId);
             bestValue = Math.max(bestValue, value);
         }
 
         return bestValue;
     }
 
-    private int minValue(TreeNode node, int depth) {
+    private int minValue(TreeNode node, int depth, int playerId) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return evaluateBoard(playerId, node.getBoard());
+            return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
         }
 
         int bestValue = Integer.MAX_VALUE;
 
         for (TreeNode child : node.getChildren()) {
-            int value = maxValue(child, depth - 1);
+            int value = maxValue(child, depth - 1, playerId);
             bestValue = Math.min(bestValue, value);
         }
 
@@ -79,18 +79,8 @@ public class MinMaxPlayer extends PlayerController {
         System.arraycopy(availableMoves, 0, result, 0, moveCount);
         return result;
     }
-
-    private int evaluateBoard(int playerId, Board board) {
-        int opponentId = 3 - playerId; // Calculate the opponent's ID
-
-        // Calculate the player's and opponent's scores
-        int playerScore = heuristic.getBestAction(playerId, board);
-        int opponentScore = heuristic.getBestAction(opponentId, board);
-
-        // Return the difference between the player's and opponent's scores
-        return playerScore - opponentScore;
-    }
 }
+
 
 
 

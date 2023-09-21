@@ -18,12 +18,12 @@ public class SimpleHeuristic extends Heuristic {
      * Determine utility of a board state
      */
     @Override
-    protected int evaluate(int player, Board board) {
+    protected int evaluate(int player, Board board, int gameN) {
         int[][] boardState = board.getBoardState();
-        int winning = Game.winning(boardState, this.gameN);
-        if(winning == player) {
+        int winning = Game.winning(boardState, gameN);
+        if (winning == player) {
             return Integer.MAX_VALUE;
-        } else if(winning != 0) {
+        } else if (winning != 0) {
             return Integer.MIN_VALUE;
         }
 
@@ -69,5 +69,4 @@ public class SimpleHeuristic extends Heuristic {
 
         return maxInRow;
     }
-
 }

@@ -59,7 +59,7 @@ public abstract class Heuristic {
     protected int evaluateAction(int player, int action, Board board) {
         if (board.isValid(action)) {
             evalCount++;
-            int value = evaluateBoard(player, board.getNewBoard(action, player));
+            int value = evaluateBoard(player, board.getNewBoard(action, player), gameN);
             return value;
         } else return Integer.MIN_VALUE;
     }
@@ -70,9 +70,9 @@ public abstract class Heuristic {
      * @param board the board to evaluate
      * @return the utility
      */
-    public int evaluateBoard(int player, Board board) {
+    public int evaluateBoard(int player, Board board, int gameN) {
         evalCount++;
-        return evaluate(player, board);
+        return evaluate(player, board, gameN);
     }
 
     public String toString() {
@@ -87,5 +87,5 @@ public abstract class Heuristic {
      * @param board the board to evaluate
      * @return heuristic value for the board state
      */
-    protected abstract int evaluate(int player, Board board);
+    protected abstract int evaluate(int player, Board board, int gameN);
 }

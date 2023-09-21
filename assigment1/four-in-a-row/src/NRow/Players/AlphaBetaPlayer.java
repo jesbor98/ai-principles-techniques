@@ -24,7 +24,7 @@ public class AlphaBetaPlayer extends PlayerController {
         for (int move : availableMoves) {
             Board newBoard = board.getNewBoard(move, playerId);
             TreeNode childNode = new TreeNode(newBoard, move);
-            int value = minValue(childNode, depth - 1, alpha, beta);
+            int value = minValue(childNode, depth - 1, alpha, beta, playerId);
             
             if (value > alpha) {
                 alpha = value; // Update alpha
@@ -35,13 +35,13 @@ public class AlphaBetaPlayer extends PlayerController {
         return bestMove;
     }
 
-    private int maxValue(TreeNode node, int depth, int alpha, int beta) {
+    private int maxValue(TreeNode node, int depth, int alpha, int beta, int playerId) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return heuristic.evaluateBoard(playerId, node.getBoard());
+            return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
         }
 
         for (TreeNode child : node.getChildren()) {
-            int value = minValue(child, depth - 1, alpha, beta);
+            int value = minValue(child, depth - 1, alpha, beta, playerId);
             alpha = Math.max(alpha, value); // Update alpha
 
             if (alpha >= beta) {
@@ -52,13 +52,13 @@ public class AlphaBetaPlayer extends PlayerController {
         return alpha;
     }
 
-    private int minValue(TreeNode node, int depth, int alpha, int beta) {
+    private int minValue(TreeNode node, int depth, int alpha, int beta, int playerId) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return heuristic.evaluateBoard(playerId, node.getBoard());
+            return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
         }
 
         for (TreeNode child : node.getChildren()) {
-            int value = maxValue(child, depth - 1, alpha, beta);
+            int value = maxValue(child, depth - 1, alpha, beta, playerId);
             beta = Math.min(beta, value); // Update beta
 
             if (alpha >= beta) {
@@ -85,6 +85,7 @@ public class AlphaBetaPlayer extends PlayerController {
         return result;
     }
 }
+
 
 
 // package NRow.Players;
