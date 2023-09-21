@@ -1,18 +1,32 @@
 package NRow;
-import java.util.*;
-public class TreeNode {
-    private Board gameState;
-    private int currentPlayer; // Player to move in this state
 
+import java.util.ArrayList;
+import java.util.List;
+
+public class TreeNode {
+    private Board board;
+    private int move;
     private List<TreeNode> children;
 
-    public TreeNode(Board gameState, int currentPlayer) {
-        this.gameState = gameState;
-        this.currentPlayer = currentPlayer;
+    public TreeNode(Board board, int move) {
+        this.board = board;
+        this.move = move;
         this.children = new ArrayList<>();
     }
 
-    // Getter and setter methods for gameState, currentPlayer, and value
-    // Methods to add and access children nodes
-}
+    public Board getBoard() {
+        return board;
+    }
 
+    public int getMove() {
+        return move;
+    }
+
+    public List<TreeNode> getChildren() {
+        return children;
+    }
+
+    public void addChild(TreeNode child) {
+        children.add(child);
+    }
+}
