@@ -60,14 +60,19 @@ public class Board {
    * @return true if succeeded
    */
   public boolean play(int x, int playerId) {
-    for (int i = this.boardState[0].length - 1; i >= 0; i--) {
-      if (this.boardState[x][i] == 0) {
-        this.boardState[x][i] = playerId;
-        return true;
-      }
-    }
-    return false;
+    if (x < 0 || x >= width) {
+      // Invalid column index
+      return false;
   }
+
+  for (int i = this.boardState[0].length - 1; i >= 0; i--) {
+      if (this.boardState[x][i] == 0) {
+          this.boardState[x][i] = playerId;
+          return true;
+      }
+  }
+  return false;
+}
 
   /**
    * Returns if a move is valid
