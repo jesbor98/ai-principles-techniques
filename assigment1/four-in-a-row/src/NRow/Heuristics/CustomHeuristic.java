@@ -3,19 +3,41 @@ package NRow.Heuristics;
 import NRow.Board;
 import NRow.Game;
 
+/**
+ * The CustomHeuristic class provides a custom heuristic function for evaluating game states.
+ *
+ * This heuristic considers factors such as consecutive pieces, blocking opponents, and encouraging
+ * the completion of rows to assign a utility value to a game state.
+ */
 public class CustomHeuristic extends Heuristic {
 
+    /**
+     * Constructs a new CustomHeuristic with the specified game parameter.
+     *
+     * @param gameN The value of N for the game.
+     */
     public CustomHeuristic(int gameN) {
         super(gameN);
     }
 
+    /**
+     * Gets the name of the heuristic.
+     *
+     * @return The name of the heuristic.
+     */
     @Override
     protected String name() {
         return "Custom";
     }
+    
 
-    /**
-     * Determine utility of a board state
+     /**
+     * Evaluates a game state and assigns a utility value.
+     *
+     * @param player The player for whom the utility is calculated.
+     * @param board The game board state.
+     * @param gameN The value of N for the game.
+     * @return The utility value of the game state.
      */
     @Override
     protected int evaluate(int player, Board board, int gameN) {
@@ -131,7 +153,14 @@ public class CustomHeuristic extends Heuristic {
     }
 
     /**
-     * Assign a score to the current player's row to encourage completing rows
+     * Assigns a score to the current player's row to encourage completing rows.
+     *
+     * @param player The player for whom the score is calculated.
+     * @param row The row index on the game board.
+     * @param col The column index on the game board.
+     * @param boardState The current game board state.
+     * @param gameN The value of N for the game.
+     * @return The row score.
      */
     private int playerRowScore(int player, int row, int col, int[][] boardState, int gameN) {
         int score = 0;

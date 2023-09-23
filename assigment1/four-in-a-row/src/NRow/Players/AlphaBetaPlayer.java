@@ -5,14 +5,36 @@ import NRow.Board;
 import NRow.Heuristics.Heuristic;
 import NRow.Game;
 
-public class AlphaBetaPlayer extends PlayerController {
-    private int depth;
+/**
+ * The AlphaBetaPlayer class represents a player that uses the Alpha-Beta Pruning algorithm
+ * to make optimal moves in a game.
+ *
+ * This player extends the PlayerController class and implements the minimax algorithm
+ * with alpha-beta pruning to find the best move in a game.
+ */
 
+public class AlphaBetaPlayer extends PlayerController {
+    private int depth; // Search depth for the alpha-beta algorithm.
+
+    /**
+     * Constructs a new AlphaBetaPlayer with the specified parameters.
+     *
+     * @param playerId The identifier for this player.
+     * @param gameN The value of N for the game.
+     * @param depth The search depth for the alpha-beta algorithm.
+     * @param heuristic The heuristic function used to evaluate game states.
+     */
     public AlphaBetaPlayer(int playerId, int gameN, int depth, Heuristic heuristic) {
         super(playerId, gameN, heuristic);
         this.depth = depth;
     }
 
+    /**
+     * Makes a move on the game board using the Alpha-Beta Pruning algorithm.
+     *
+     * @param board The current game board.
+     * @return The column index representing the best move for the player.
+     */
     @Override
     public int makeMove(Board board) {
         int[] availableMoves = getAvailableMoves(board);
@@ -35,6 +57,16 @@ public class AlphaBetaPlayer extends PlayerController {
         return bestMove;
     }
 
+    /**
+     * Finds the maximum value during the alpha-beta search.
+     *
+     * @param node The current tree node.
+     * @param depth The remaining search depth.
+     * @param alpha The current alpha value.
+     * @param beta The current beta value.
+     * @param playerId The player's identifier.
+     * @return The maximum value found.
+     */
     private int maxValue(TreeNode node, int depth, int alpha, int beta, int playerId) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
             return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
@@ -51,6 +83,16 @@ public class AlphaBetaPlayer extends PlayerController {
 
         return alpha;
     }
+    /**
+     * Finds the minimum value during the alpha-beta search.
+     *
+     * @param node The current tree node.
+     * @param depth The remaining search depth.
+     * @param alpha The current alpha value.
+     * @param beta The current beta value.
+     * @param playerId The player's identifier.
+     * @return The minimum value found.
+     */
 
     private int minValue(TreeNode node, int depth, int alpha, int beta, int playerId) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
@@ -69,6 +111,12 @@ public class AlphaBetaPlayer extends PlayerController {
         return beta;
     }
 
+    /**
+     * Retrieves the available moves for the current game board.
+     *
+     * @param board The current game board.
+     * @return An array of available move indices (column indices).
+     */
     private int[] getAvailableMoves(Board board) {
         int[] availableMoves = new int[board.width];
         int moveCount = 0;

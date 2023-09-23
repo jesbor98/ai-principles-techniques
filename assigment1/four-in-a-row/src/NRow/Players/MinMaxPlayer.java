@@ -5,13 +5,35 @@ import NRow.Board;
 import NRow.Heuristics.Heuristic;
 import NRow.Game;
 
+/**
+ * The MinMaxPlayer class represents a player that uses the Minimax algorithm
+ * to make optimal moves in a game.
+ *
+ * This player extends the PlayerController class and implements the Minimax algorithm
+ * to find the best move in a game.
+ */
 public class MinMaxPlayer extends PlayerController {
     private int depth;
 
+    /**
+     * Constructs a new MinMaxPlayer with the specified parameters.
+     *
+     * @param playerId The identifier for this player.
+     * @param gameN The value of N for the game.
+     * @param depth The search depth for the Minimax algorithm.
+     * @param heuristic The heuristic function used to evaluate game states.
+     */
     public MinMaxPlayer(int playerId, int gameN, int depth, Heuristic heuristic) {
         super(playerId, gameN, heuristic);
         this.depth = depth;
     }
+
+    /**
+     * Makes a move on the game board using the Minimax algorithm.
+     *
+     * @param board The current game board.
+     * @return The column index representing the best move for the player.
+     */
 
     @Override
     public int makeMove(Board board) {
@@ -34,6 +56,14 @@ public class MinMaxPlayer extends PlayerController {
         return bestMove;
     }
 
+    /**
+     * Finds the maximum value during the Minimax search.
+     *
+     * @param node The current tree node.
+     * @param depth The remaining search depth.
+     * @param playerId The player's identifier.
+     * @return The maximum value found.
+     */
     private int maxValue(TreeNode node, int depth, int playerId) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
             return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
@@ -49,6 +79,14 @@ public class MinMaxPlayer extends PlayerController {
         return bestValue;
     }
 
+    /**
+     * Finds the minimum value during the Minimax search.
+     *
+     * @param node The current tree node.
+     * @param depth The remaining search depth.
+     * @param playerId The player's identifier.
+     * @return The minimum value found.
+     */
     private int minValue(TreeNode node, int depth, int playerId) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
             return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
@@ -64,6 +102,12 @@ public class MinMaxPlayer extends PlayerController {
         return bestValue;
     }
 
+    /**
+     * Retrieves the available moves for the current game board.
+     *
+     * @param board The current game board.
+     * @return An array of available move indices (column indices).
+     */
     private int[] getAvailableMoves(Board board) {
         int[] availableMoves = new int[board.width];
         int moveCount = 0;
