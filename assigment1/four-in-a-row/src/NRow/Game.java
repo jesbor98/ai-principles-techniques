@@ -26,6 +26,10 @@ public class Game {
     this.gameBoard = new Board(boardWidth, boardHeight);
   }
 
+  public Board getBoard() {
+    return gameBoard;
+  }
+
   /**
    * Starts the game
    * @return the playerId of the winner
