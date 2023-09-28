@@ -1,9 +1,7 @@
 package NRow;
 import NRow.Heuristics.Heuristic;
 import NRow.Heuristics.SimpleHeuristic;
-import NRow.Heuristics.CustomHeuristic;
 import NRow.Players.MinMaxPlayer;
-import NRow.Players.PlayerController;
 import NRow.Players.AlphaBetaPlayer;
 
 public class PlayerPerformanceTest {
@@ -16,7 +14,7 @@ public class PlayerPerformanceTest {
         for (int depth : depths) {
             Board board = new Board(3, 5);
         
-            Heuristic heuristic = new CustomHeuristic(gameN); // Replace with your heuristic
+            Heuristic heuristic = new SimpleHeuristic(gameN); // Replace with your heuristic
             MinMaxPlayer minMaxPlayer = new MinMaxPlayer(1, gameN, depth, heuristic);
             AlphaBetaPlayer alphaBetaPlayer = new AlphaBetaPlayer(2, gameN, depth, heuristic);
         
@@ -24,8 +22,6 @@ public class PlayerPerformanceTest {
         
             // Measure nodes expanded by MinMaxPlayer
             minMaxPlayer.makeMove(board); // This will print the nodes expanded by MinMaxPlayer
-            // Reset nodes expanded count for AlphaBetaPlayer
-            alphaBetaPlayer.resetNodesExpanded();
         
             // Measure nodes expanded by AlphaBetaPlayer
             alphaBetaPlayer.makeMove(board); // This will print the nodes expanded by AlphaBetaPlayer

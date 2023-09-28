@@ -17,7 +17,6 @@ import NRow.Game;
  */
 public class MinMaxPlayer extends PlayerController {
     private int depth;
-    private int nodesExpanded;
 
 
     /**
@@ -31,7 +30,6 @@ public class MinMaxPlayer extends PlayerController {
     public MinMaxPlayer(int playerId, int gameN, int depth, Heuristic heuristic) {
         super(playerId, gameN, heuristic);
         this.depth = depth;
-        this.nodesExpanded = 0;
 
     }
 
@@ -52,10 +50,13 @@ public int makeMove(Board board) {
     int bestMove = -1;
     int bestValue = Integer.MIN_VALUE;
 
+    TreeNode rootNode = new TreeNode(board, -1); // Create the root node with a dummy move
+
     for (int move : availableMoves) {
         Board newBoard = board.getNewBoard(move, playerId);
         TreeNode childNode = new TreeNode(newBoard, move);
-        int value = minValue(childNode, depth - 1, playerId);
+        rootNode.addChild(childNode);
+        int value = minValue(childNode, depth, playerId);
 
         if (value > bestValue) {
             bestValue = value;
@@ -64,7 +65,7 @@ public int makeMove(Board board) {
     }
 
     System.out.println("Selected Move: " + bestMove); // Print the selected move for debugging
-    System.out.println("Nodes Expanded for MinMax: " + this.nodesExpanded); // Print node count
+    System.out.println("Nodes Expanded for MinMax: " + super.getEvalCount()); // Print node count
 
     return bestMove;
 }
@@ -80,8 +81,7 @@ public int makeMove(Board board) {
      * @return The maximum value found.
      */
     private int maxValue(TreeNode node, int depth, int playerId) {
-        this.nodesExpanded++;
-        System.out.println("Expanding node MAX: " + this.nodesExpanded); // Add this line for debugging
+        System.out.println("Expanding node MAX: " + super.getEvalCount()); // Add this line for debugging
 
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
             return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
@@ -106,8 +106,7 @@ public int makeMove(Board board) {
      * @return The minimum value found.
      */
     private int minValue(TreeNode node, int depth, int playerId) {
-        this.nodesExpanded++;
-        System.out.println("Expanding node MIN: " + this.nodesExpanded); // Add this line for debugging
+        System.out.println("Expanding node MIN: " + super.getEvalCount()); // Add this line for debugging
 
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
             return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
@@ -143,11 +142,6 @@ public int makeMove(Board board) {
         int[] result = new int[moveCount];
         System.arraycopy(availableMoves, 0, result, 0, moveCount);
         return result;
-    }
-
-    // Method to reset the nodesExpanded count
-    public void resetNodesExpanded() {
-        this.nodesExpanded = 0; // Reset the count to 0
     }
 }
 
