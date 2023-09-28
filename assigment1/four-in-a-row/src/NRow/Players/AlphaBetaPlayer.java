@@ -15,6 +15,7 @@ import NRow.Game;
 
 public class AlphaBetaPlayer extends PlayerController {
     private int depth; // Search depth for the alpha-beta algorithm.
+    private int nodesExpanded;
 
     /**
      * Constructs a new AlphaBetaPlayer with the specified parameters.
@@ -27,6 +28,8 @@ public class AlphaBetaPlayer extends PlayerController {
     public AlphaBetaPlayer(int playerId, int gameN, int depth, Heuristic heuristic) {
         super(playerId, gameN, heuristic);
         this.depth = depth;
+        this.nodesExpanded = 0;
+
     }
 
     /**
@@ -54,6 +57,9 @@ public class AlphaBetaPlayer extends PlayerController {
             }
         }
 
+        System.out.println("Nodes Expanded for AlphaBeta: " + this.nodesExpanded); // Print node count
+
+
         return bestMove;
     }
 
@@ -68,6 +74,9 @@ public class AlphaBetaPlayer extends PlayerController {
      * @return The maximum value found.
      */
     private int maxValue(TreeNode node, int depth, int alpha, int beta, int playerId) {
+        this.nodesExpanded++;
+        System.out.println("Expanding node: " + this.nodesExpanded); // Add this line for debugging
+
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
             return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
         }
@@ -95,6 +104,9 @@ public class AlphaBetaPlayer extends PlayerController {
      */
 
     private int minValue(TreeNode node, int depth, int alpha, int beta, int playerId) {
+        this.nodesExpanded++;
+        System.out.println("Expanding node: " + this.nodesExpanded); // Add this line for debugging
+
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
             return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
         }
@@ -131,6 +143,11 @@ public class AlphaBetaPlayer extends PlayerController {
         int[] result = new int[moveCount];
         System.arraycopy(availableMoves, 0, result, 0, moveCount);
         return result;
+    }
+
+    // Method to reset the nodesExpanded count
+    public void resetNodesExpanded() {
+        this.nodesExpanded = 0; // Reset the count to 0
     }
 }
 

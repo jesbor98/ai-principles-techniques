@@ -1,6 +1,9 @@
 package NRow.Players;
 
 import NRow.TreeNode;
+
+import java.util.Arrays;
+
 import NRow.Board;
 import NRow.Heuristics.Heuristic;
 import NRow.Game;
@@ -14,6 +17,8 @@ import NRow.Game;
  */
 public class MinMaxPlayer extends PlayerController {
     private int depth;
+    private int nodesExpanded;
+
 
     /**
      * Constructs a new MinMaxPlayer with the specified parameters.
@@ -26,6 +31,8 @@ public class MinMaxPlayer extends PlayerController {
     public MinMaxPlayer(int playerId, int gameN, int depth, Heuristic heuristic) {
         super(playerId, gameN, heuristic);
         this.depth = depth;
+        this.nodesExpanded = 0;
+
     }
 
     /**
@@ -35,26 +42,34 @@ public class MinMaxPlayer extends PlayerController {
      * @return The column index representing the best move for the player.
      */
 
-    @Override
-    public int makeMove(Board board) {
-        int[] availableMoves = getAvailableMoves(board);
+     @Override
+public int makeMove(Board board) {
+    int[] availableMoves = getAvailableMoves(board);
 
-        int bestMove = -1;
-        int bestValue = Integer.MIN_VALUE;
+    // Print available moves for debugging
+    System.out.println("Available Moves: " + Arrays.toString(availableMoves));
 
-        for (int move : availableMoves) {
-            Board newBoard = board.getNewBoard(move, playerId);
-            TreeNode childNode = new TreeNode(newBoard, move);
-            int value = minValue(childNode, depth - 1, playerId);
+    int bestMove = -1;
+    int bestValue = Integer.MIN_VALUE;
 
-            if (value > bestValue) {
-                bestValue = value;
-                bestMove = move;
-            }
+    for (int move : availableMoves) {
+        Board newBoard = board.getNewBoard(move, playerId);
+        TreeNode childNode = new TreeNode(newBoard, move);
+        int value = minValue(childNode, depth - 1, playerId);
+
+        if (value > bestValue) {
+            bestValue = value;
+            bestMove = move;
         }
-
-        return bestMove;
     }
+
+    System.out.println("Selected Move: " + bestMove); // Print the selected move for debugging
+    System.out.println("Nodes Expanded for MinMax: " + this.nodesExpanded); // Print node count
+
+    return bestMove;
+}
+
+     
 
     /**
      * Finds the maximum value during the Minimax search.
@@ -65,6 +80,9 @@ public class MinMaxPlayer extends PlayerController {
      * @return The maximum value found.
      */
     private int maxValue(TreeNode node, int depth, int playerId) {
+        this.nodesExpanded++;
+        System.out.println("Expanding node MAX: " + this.nodesExpanded); // Add this line for debugging
+
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
             return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
         }
@@ -88,6 +106,9 @@ public class MinMaxPlayer extends PlayerController {
      * @return The minimum value found.
      */
     private int minValue(TreeNode node, int depth, int playerId) {
+        this.nodesExpanded++;
+        System.out.println("Expanding node MIN: " + this.nodesExpanded); // Add this line for debugging
+
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
             return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
         }
@@ -122,6 +143,11 @@ public class MinMaxPlayer extends PlayerController {
         int[] result = new int[moveCount];
         System.arraycopy(availableMoves, 0, result, 0, moveCount);
         return result;
+    }
+
+    // Method to reset the nodesExpanded count
+    public void resetNodesExpanded() {
+        this.nodesExpanded = 0; // Reset the count to 0
     }
 }
 
