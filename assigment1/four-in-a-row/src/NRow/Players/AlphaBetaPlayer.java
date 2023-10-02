@@ -9,11 +9,14 @@ import java.util.Arrays;
 public class AlphaBetaPlayer extends PlayerController {
     private int depth;
     private TreeNode rootNode;
+    private int player2ID;
 
     public AlphaBetaPlayer(int playerId, int gameN, int depth, Heuristic heuristic) {
         super(playerId, gameN, heuristic);
         this.depth = depth;
         this.rootNode = new TreeNode(null, -1); // Create the root node with a dummy move and null board
+        this.player2ID = (playerId == 1) ? 2 : 1; // Set player2ID based on playerId
+
     }
 
     @Override
@@ -25,13 +28,13 @@ public class AlphaBetaPlayer extends PlayerController {
         int beta = Integer.MAX_VALUE; // Initialize beta
 
         // Clear the existing child nodes (if any) from the previous move
-        rootNode.getChildren().clear();
+       
 
         for (int move : availableMoves) {
             Board newBoard = board.getNewBoard(move, playerId);
             TreeNode childNode = new TreeNode(newBoard, move);
             rootNode.addChild(childNode);
-            int value = minValue(childNode, depth - 1, alpha, beta, playerId);
+            int value = minValue(childNode, depth - 1, alpha, beta, playerId, player2ID);
 
             if (value > alpha) {
                 alpha = value; // Update alpha
@@ -52,7 +55,7 @@ public class AlphaBetaPlayer extends PlayerController {
         }
 
         for (TreeNode child : node.getChildren()) {
-            int value = minValue(child, depth - 1, alpha, beta, playerId);
+            int value = minValue(child, depth - 1, alpha, beta, playerId, player2ID);
             alpha = Math.max(alpha, value); // Update alpha
 
             if (alpha >= beta) {
@@ -63,11 +66,11 @@ public class AlphaBetaPlayer extends PlayerController {
         return alpha;
     }
 
-    private int minValue(TreeNode node, int depth, int alpha, int beta, int playerId) {
+    private int minValue(TreeNode node, int depth, int alpha, int beta, int playerId, int player2ID) {
         System.out.println("Expanding node: " + super.getEvalCount()); // Add this line for debugging
 
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return evaluatePosition(node.getBoard(), playerId);
+            return evaluatePosition(node.getBoard(), player2ID);
         }
 
         for (TreeNode child : node.getChildren()) {

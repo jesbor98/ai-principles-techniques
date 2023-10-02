@@ -13,45 +13,78 @@ import java.util.Arrays;
 public class MinMaxPlayer extends PlayerController {
     private int depth;
     private TreeNode rootNode;
+    private int player2ID; // Add a field for player2ID
+
 
     public MinMaxPlayer(int playerId, int gameN, int depth, Heuristic heuristic) {
         super(playerId, gameN, heuristic);
         this.depth = depth;
         this.rootNode = new TreeNode(null, -1); // Create the root node with a dummy move and null board
+        this.player2ID = (playerId == 1) ? 2 : 1; // Set player2ID based on playerId
     }
 
     @Override
-    public int makeMove(Board board) {
-        int[] availableMoves = getAvailableMoves(board);
+public int makeMove(Board board) {
+    int[] availableMoves = getAvailableMoves(board);
 
-        // Print available moves for debugging
-        System.out.println("Available Moves: " + Arrays.toString(availableMoves));
+    // Print available moves for debugging
+    System.out.println("Available Moves: " + Arrays.toString(availableMoves));
 
-        int bestMove = -1;
-        int bestValue = Integer.MIN_VALUE;
-
-        // Clear the existing child nodes (if any) from the previous move
-        rootNode.getChildren().clear();
-
-        for (int move : availableMoves) {
-            Board newBoard = board.getNewBoard(move, playerId);
-            TreeNode childNode = new TreeNode(newBoard, move);
-            rootNode.addChild(childNode);
-            int value = minValue(childNode, depth, playerId);
-
-            if (value > bestValue) {
-                bestValue = value;
-                bestMove = move;
-            }
-        }
-
-        System.out.println("Selected Move: " + bestMove); // Print the selected move for debugging
-        System.out.println("Nodes Expanded for MinMax: " + super.getEvalCount()); // Print node count
-
-        return bestMove;
+    if (availableMoves.length == 0) {
+        System.out.println("No available moves left.");
+        return -1; // No valid moves left, return an error value or handle it accordingly
     }
 
-    private int maxValue(TreeNode node, int depth, int playerId) {
+    int bestMove = -1;
+    int bestValue = Integer.MIN_VALUE;
+
+    // Clear the existing child nodes (if any) from the previous move
+  
+
+    for (int move : availableMoves) {
+        Board newBoard = board.getNewBoard(move, playerId);
+        TreeNode childNode = new TreeNode(newBoard, move);
+        System.out.println("Number of children:" + childNode.getChildren().size());
+        rootNode.addChild(childNode);
+        int value = minValue(childNode, depth, playerId, player2ID);
+
+        if (value > bestValue) {
+            bestValue = value;
+            bestMove = move;
+        }
+    }
+
+    System.out.println("Selected Move: " + bestMove); // Print the selected move for debugging
+    System.out.println("Nodes Expanded for MinMax: " + super.getEvalCount()); // Print node count
+
+    int validMove = findValidMove(board, bestMove);
+        if (validMove != -1) {
+            return validMove;
+        } else {
+            // Handle the case when no valid move is found (e.g., board is full)
+            // You may want to return a special value or handle it as appropriate for your game.
+            return -1; // Or another suitable value or action
+        }
+    }
+
+public int findValidMove(Board board, int move) {
+    if (board.isValid(move)) {
+        return move; // Found a valid move
+    } else {
+        int nextMove = move + 1;
+        if (nextMove >= board.width) {
+            nextMove = 0; // Wrap around to the beginning
+        }
+        // Ensure that nextMove is within valid bounds
+        if (nextMove < 0) {
+            nextMove = 0; // Handle case where nextMove becomes negative
+        }
+        // Recursively try the next move
+        return findValidMove(board, nextMove);
+    }
+}
+
+    private int maxValue(TreeNode node, int depth, int playerId, int player2ID) {
         System.out.println("Expanding node MAX: " + super.getEvalCount());
 
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
@@ -61,24 +94,24 @@ public class MinMaxPlayer extends PlayerController {
         int bestValue = Integer.MIN_VALUE;
 
         for (TreeNode child : node.getChildren()) {
-            int value = minValue(child, depth - 1, playerId);
+            int value = minValue(child, depth - 1, playerId, player2ID);
             bestValue = Math.max(bestValue, value);
         }
 
         return bestValue;
     }
 
-    private int minValue(TreeNode node, int depth, int playerId) {
+    private int minValue(TreeNode node, int depth, int playerId, int player2ID) {
         System.out.println("Expanding node MIN: " + super.getEvalCount());
 
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return evaluatePosition(node.getBoard(), playerId);
+            return evaluatePosition(node.getBoard(), player2ID);
         }
 
         int bestValue = Integer.MAX_VALUE;
 
         for (TreeNode child : node.getChildren()) {
-            int value = maxValue(child, depth - 1, playerId);
+            int value = maxValue(child, depth - 1, playerId, player2ID);
             bestValue = Math.min(bestValue, value);
         }
 
