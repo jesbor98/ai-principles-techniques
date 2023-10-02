@@ -80,7 +80,7 @@ public class Board {
    * @return true if spot is not taken yet
    */
   public boolean isValid(int x) {
-    return getBoardState()[x][0] == 0;
+    return x >= 0 && x < width && getBoardState()[x][0] == 0;
   }
 
   /**
