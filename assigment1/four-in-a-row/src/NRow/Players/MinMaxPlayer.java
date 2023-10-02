@@ -8,83 +8,54 @@ import NRow.Board;
 import NRow.Heuristics.Heuristic;
 import NRow.Game;
 
-/**
- * The MinMaxPlayer class represents a player that uses the Minimax algorithm
- * to make optimal moves in a game.
- *
- * This player extends the PlayerController class and implements the Minimax algorithm
- * to find the best move in a game.
- */
+import java.util.Arrays;
+
 public class MinMaxPlayer extends PlayerController {
     private int depth;
+    private TreeNode rootNode;
 
-
-    /**
-     * Constructs a new MinMaxPlayer with the specified parameters.
-     *
-     * @param playerId The identifier for this player.
-     * @param gameN The value of N for the game.
-     * @param depth The search depth for the Minimax algorithm.
-     * @param heuristic The heuristic function used to evaluate game states.
-     */
     public MinMaxPlayer(int playerId, int gameN, int depth, Heuristic heuristic) {
         super(playerId, gameN, heuristic);
         this.depth = depth;
-
+        this.rootNode = new TreeNode(null, -1); // Create the root node with a dummy move and null board
     }
 
-    /**
-     * Makes a move on the game board using the Minimax algorithm.
-     *
-     * @param board The current game board.
-     * @return The column index representing the best move for the player.
-     */
+    @Override
+    public int makeMove(Board board) {
+        int[] availableMoves = getAvailableMoves(board);
 
-     @Override
-public int makeMove(Board board) {
-    int[] availableMoves = getAvailableMoves(board);
+        // Print available moves for debugging
+        System.out.println("Available Moves: " + Arrays.toString(availableMoves));
 
-    // Print available moves for debugging
-    System.out.println("Available Moves: " + Arrays.toString(availableMoves));
+        int bestMove = -1;
+        int bestValue = Integer.MIN_VALUE;
 
-    int bestMove = -1;
-    int bestValue = Integer.MIN_VALUE;
+        // Clear the existing child nodes (if any) from the previous move
+        rootNode.getChildren().clear();
 
-    TreeNode rootNode = new TreeNode(board, -1); // Create the root node with a dummy move
+        for (int move : availableMoves) {
+            Board newBoard = board.getNewBoard(move, playerId);
+            TreeNode childNode = new TreeNode(newBoard, move);
+            rootNode.addChild(childNode);
+            int value = minValue(childNode, depth, playerId);
 
-    for (int move : availableMoves) {
-        Board newBoard = board.getNewBoard(move, playerId);
-        TreeNode childNode = new TreeNode(newBoard, move);
-        rootNode.addChild(childNode);
-        int value = minValue(childNode, depth, playerId);
-
-        if (value > bestValue) {
-            bestValue = value;
-            bestMove = move;
+            if (value > bestValue) {
+                bestValue = value;
+                bestMove = move;
+            }
         }
+
+        System.out.println("Selected Move: " + bestMove); // Print the selected move for debugging
+        System.out.println("Nodes Expanded for MinMax: " + super.getEvalCount()); // Print node count
+
+        return bestMove;
     }
 
-    System.out.println("Selected Move: " + bestMove); // Print the selected move for debugging
-    System.out.println("Nodes Expanded for MinMax: " + super.getEvalCount()); // Print node count
-
-    return bestMove;
-}
-
-     
-
-    /**
-     * Finds the maximum value during the Minimax search.
-     *
-     * @param node The current tree node.
-     * @param depth The remaining search depth.
-     * @param playerId The player's identifier.
-     * @return The maximum value found.
-     */
     private int maxValue(TreeNode node, int depth, int playerId) {
-        System.out.println("Expanding node MAX: " + super.getEvalCount()); // Add this line for debugging
+        System.out.println("Expanding node MAX: " + super.getEvalCount());
 
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
+            return evaluatePosition(node.getBoard(), playerId);
         }
 
         int bestValue = Integer.MIN_VALUE;
@@ -97,19 +68,11 @@ public int makeMove(Board board) {
         return bestValue;
     }
 
-    /**
-     * Finds the minimum value during the Minimax search.
-     *
-     * @param node The current tree node.
-     * @param depth The remaining search depth.
-     * @param playerId The player's identifier.
-     * @return The minimum value found.
-     */
     private int minValue(TreeNode node, int depth, int playerId) {
-        System.out.println("Expanding node MIN: " + super.getEvalCount()); // Add this line for debugging
+        System.out.println("Expanding node MIN: " + super.getEvalCount());
 
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return heuristic.evaluateBoard(playerId, node.getBoard(), gameN);
+            return evaluatePosition(node.getBoard(), playerId);
         }
 
         int bestValue = Integer.MAX_VALUE;
@@ -122,12 +85,12 @@ public int makeMove(Board board) {
         return bestValue;
     }
 
-    /**
-     * Retrieves the available moves for the current game board.
-     *
-     * @param board The current game board.
-     * @return An array of available move indices (column indices).
-     */
+    private int evaluatePosition(Board board, int playerId) {
+        // Implement your static evaluation function here
+        // You can use the provided heuristic object to evaluate the board state
+        return heuristic.evaluateBoard(playerId, board, gameN);
+    }
+
     private int[] getAvailableMoves(Board board) {
         int[] availableMoves = new int[board.width];
         int moveCount = 0;
@@ -144,6 +107,7 @@ public int makeMove(Board board) {
         return result;
     }
 }
+
 
 
 
