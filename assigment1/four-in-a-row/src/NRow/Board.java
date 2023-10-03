@@ -12,7 +12,7 @@ public class Board {
    * @param width
    * @param height
    */
-  Board(int width, int height) {
+  public Board(int width, int height) {
     this.width = width;
     this.height = height;
     this.boardState = new int[width][height];
