@@ -1,4 +1,5 @@
-package NRow;
+package NRow.Tests;
+import NRow.Board;
 import NRow.Heuristics.Heuristic;
 import NRow.Heuristics.SimpleHeuristic;
 import NRow.Players.MinMaxPlayer;
