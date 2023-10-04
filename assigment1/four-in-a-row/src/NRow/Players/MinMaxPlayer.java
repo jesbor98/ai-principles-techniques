@@ -26,6 +26,8 @@ public class MinMaxPlayer extends PlayerController {
     @Override
 public int makeMove(Board board) {
     int[] availableMoves = getAvailableMoves(board);
+    rootNode = new TreeNode(board, -1);
+    buildTree(rootNode, depth, playerId);
 
     // Print available moves for debugging
     System.out.println("Available Moves: " + Arrays.toString(availableMoves));
@@ -41,16 +43,12 @@ public int makeMove(Board board) {
     // Clear the existing child nodes (if any) from the previous move
   
 
-    for (int move : availableMoves) {
-        Board newBoard = board.getNewBoard(move, playerId);
-        TreeNode childNode = new TreeNode(newBoard, move);
-        System.out.println("Number of children:" + childNode.getChildren().size());
-        rootNode.addChild(childNode);
-        int value = minValue(childNode, depth, playerId, player2ID);
+    for (TreeNode child : rootNode.getChildren()) {
+        int value = minValue(child, depth, playerId, player2ID);
 
         if (value > bestValue) {
             bestValue = value;
-            bestMove = move;
+            bestMove = child.getMove();
         }
     }
 
@@ -84,39 +82,50 @@ public int findValidMove(Board board, int move) {
     }
 }
 
-    private int maxValue(TreeNode node, int depth, int playerId, int player2ID) {
-        System.out.println("Expanding node MAX: " + super.getEvalCount());
-
-        if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return evaluatePosition(node.getBoard(), playerId);
-        }
-
-        int bestValue = Integer.MIN_VALUE;
-
-        for (TreeNode child : node.getChildren()) {
-            int value = minValue(child, depth - 1, playerId, player2ID);
-            bestValue = Math.max(bestValue, value);
-        }
-
-        return bestValue;
+private void buildTree(TreeNode node, int depth, int currentPlayer) {
+    if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
+        return;
     }
 
-    private int minValue(TreeNode node, int depth, int playerId, int player2ID) {
-        System.out.println("Expanding node MIN: " + super.getEvalCount());
+    int[] availableMoves = getAvailableMoves(node.getBoard());
 
-        if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return evaluatePosition(node.getBoard(), player2ID);
-        }
-
-        int bestValue = Integer.MAX_VALUE;
-
-        for (TreeNode child : node.getChildren()) {
-            int value = maxValue(child, depth - 1, playerId, player2ID);
-            bestValue = Math.min(bestValue, value);
-        }
-
-        return bestValue;
+    for (int move : availableMoves) {
+        Board newBoard = node.getBoard().getNewBoard(move, currentPlayer);
+        TreeNode childNode = new TreeNode(newBoard, move);
+        node.addChild(childNode);
+        buildTree(childNode, depth - 1, (currentPlayer == playerId) ? player2ID : playerId);
     }
+}
+
+private int minValue(TreeNode node, int depth, int currentPlayer, int opponent) {
+    if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
+        return evaluatePosition(node.getBoard(), opponent);
+    }
+
+    int bestValue = Integer.MAX_VALUE;
+
+    for (TreeNode child : node.getChildren()) {
+        int value = maxValue(child, depth - 1, currentPlayer, opponent);
+        bestValue = Math.min(bestValue, value);
+    }
+
+    return bestValue;
+}
+
+private int maxValue(TreeNode node, int depth, int currentPlayer, int opponent) {
+    if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
+        return evaluatePosition(node.getBoard(), currentPlayer);
+    }
+
+    int bestValue = Integer.MIN_VALUE;
+
+    for (TreeNode child : node.getChildren()) {
+        int value = minValue(child, depth - 1, currentPlayer, opponent);
+        bestValue = Math.max(bestValue, value);
+    }
+
+    return bestValue;
+}
 
     private int evaluatePosition(Board board, int playerId) {
         // Implement your static evaluation function here
