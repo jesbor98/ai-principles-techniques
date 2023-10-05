@@ -4,7 +4,6 @@ import NRow.TreeNode;
 import NRow.Board;
 import NRow.Heuristics.Heuristic;
 import NRow.Game;
-import java.util.Arrays;
 
 public class AlphaBetaPlayer extends PlayerController {
     private int depth;
@@ -26,16 +25,12 @@ public class AlphaBetaPlayer extends PlayerController {
 
         if (availableMoves.length == 0) {
             System.out.println("No available moves left.");
-            return -1; // No valid moves left, return an error value or handle it accordingly
+            return -1;
         }
 
-        int bestMove = -1;
-        int alpha = Integer.MIN_VALUE; // Initialize alpha
-        int beta = Integer.MAX_VALUE; // Initialize beta
-
-        // Clear the existing child nodes (if any) from the previous move
-      
-
+        int bestMove = 0;
+        int alpha = Integer.MIN_VALUE;
+        int beta = Integer.MAX_VALUE;
         
         for (TreeNode child : rootNode.getChildren()) {
             
@@ -47,15 +42,11 @@ public class AlphaBetaPlayer extends PlayerController {
             }
         }
 
-        System.out.println("Nodes Expanded for AlphaBeta: " + super.getEvalCount()); // Print node count
-
         int validMove = findValidMove(board, bestMove);
-        if (validMove != -1) {
+        if (validMove != 0) {
             return validMove;
         } else {
-            // Handle the case when no valid move is found (e.g., board is full)
-            // You may want to return a special value or handle it as appropriate for your game.
-            return -1; // Or another suitable value or action
+            return 0;
         }
     
     }
@@ -127,8 +118,6 @@ public class AlphaBetaPlayer extends PlayerController {
     }
 
     private int evaluatePosition(Board board) {
-        // Implement your static evaluation function here
-        // You can use the provided heuristic object to evaluate the board state
         return heuristic.evaluateBoard(this.playerId, board, gameN);
     }
 
