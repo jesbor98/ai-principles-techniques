@@ -27,7 +27,7 @@ public class MinMaxPlayer extends PlayerController {
 public int makeMove(Board board) {
     int[] availableMoves = getAvailableMoves(board);
     rootNode = new TreeNode(board, -1);
-    buildTree(rootNode, depth, playerId);
+    buildTree(rootNode, depth, player2ID);
 
     // Print available moves for debugging
     System.out.println("Available Moves: " + Arrays.toString(availableMoves));
@@ -99,7 +99,7 @@ private void buildTree(TreeNode node, int depth, int currentPlayer) {
 
 private int minValue(TreeNode node, int depth, int currentPlayer, int opponent) {
     if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-        return evaluatePosition(node.getBoard(), opponent);
+        return evaluatePosition(node.getBoard());
     }
 
     int bestValue = Integer.MAX_VALUE;
@@ -114,7 +114,7 @@ private int minValue(TreeNode node, int depth, int currentPlayer, int opponent) 
 
 private int maxValue(TreeNode node, int depth, int currentPlayer, int opponent) {
     if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-        return evaluatePosition(node.getBoard(), currentPlayer);
+        return evaluatePosition(node.getBoard());
     }
 
     int bestValue = Integer.MIN_VALUE;
@@ -127,10 +127,10 @@ private int maxValue(TreeNode node, int depth, int currentPlayer, int opponent) 
     return bestValue;
 }
 
-    private int evaluatePosition(Board board, int playerId) {
+    private int evaluatePosition(Board board) {
         // Implement your static evaluation function here
         // You can use the provided heuristic object to evaluate the board state
-        return heuristic.evaluateBoard(playerId, board, gameN);
+        return heuristic.evaluateBoard(this.playerId, board, gameN);
     }
 
     private int[] getAvailableMoves(Board board) {

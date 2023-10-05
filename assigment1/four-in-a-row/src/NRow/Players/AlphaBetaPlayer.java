@@ -22,7 +22,7 @@ public class AlphaBetaPlayer extends PlayerController {
     public int makeMove(Board board) {
         int[] availableMoves = getAvailableMoves(board);
         rootNode = new TreeNode(board, -1);
-        buildTree(rootNode, depth, playerId);
+        buildTree(rootNode, depth, player2ID);
 
         if (availableMoves.length == 0) {
             System.out.println("No available moves left.");
@@ -79,7 +79,7 @@ public class AlphaBetaPlayer extends PlayerController {
 
     private int minValue(TreeNode node, int depth, int alpha, int beta, int currentPlayer, int opponent) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return evaluatePosition(node.getBoard(), opponent);
+            return evaluatePosition(node.getBoard());
         }
 
         for (TreeNode child : node.getChildren()) {
@@ -96,7 +96,7 @@ public class AlphaBetaPlayer extends PlayerController {
 
     private int maxValue(TreeNode node, int depth, int alpha, int beta, int currentPlayer, int opponent) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return evaluatePosition(node.getBoard(), currentPlayer);
+            return evaluatePosition(node.getBoard());
         }
 
         for (TreeNode child : node.getChildren()) {
@@ -126,10 +126,10 @@ public class AlphaBetaPlayer extends PlayerController {
         }
     }
 
-    private int evaluatePosition(Board board, int playerId) {
+    private int evaluatePosition(Board board) {
         // Implement your static evaluation function here
         // You can use the provided heuristic object to evaluate the board state
-        return heuristic.evaluateBoard(playerId, board, gameN);
+        return heuristic.evaluateBoard(this.playerId, board, gameN);
     }
 
     private int[] getAvailableMoves(Board board) {

@@ -35,10 +35,10 @@ public class App {
         PlayerController human2 = new HumanPlayer(2, n, heuristic2);
 
         //TODO: Implement other PlayerControllers (MinMax, AlphaBeta)
-        PlayerController minMaxPlayer = new MinMaxPlayer(1, n, 4, customHeuristic2); // Adjust the depth as needed
-        PlayerController minMaxPlayer2 = new MinMaxPlayer(2, n, 2, customHeuristic2); // Adjust the depth as needed
-        PlayerController alphaBetaPlayer = new AlphaBetaPlayer(1, n, 3, customHeuristic1 ); // Adjust the depth as needed
-        PlayerController alphaBetaPlayer2 = new AlphaBetaPlayer(2, n, 4, customHeuristic1 ); // Adjust the depth as needed
+        PlayerController minMaxPlayer = new MinMaxPlayer(1, n, 1, customHeuristic2); // Adjust the depth as needed
+        PlayerController minMaxPlayer2 = new MinMaxPlayer(2, n, 0, customHeuristic2); // Adjust the depth as needed
+        PlayerController alphaBetaPlayer = new AlphaBetaPlayer(1, n, 0, customHeuristic1 ); // Adjust the depth as needed
+        PlayerController alphaBetaPlayer2 = new AlphaBetaPlayer(2, n, 1, customHeuristic1 ); // Adjust the depth as needed
 
 
         PlayerController[] players = { minMaxPlayer, alphaBetaPlayer2 };
