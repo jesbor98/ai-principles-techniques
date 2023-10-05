@@ -49,7 +49,32 @@ public class AlphaBetaPlayer extends PlayerController {
 
         System.out.println("Nodes Expanded for AlphaBeta: " + super.getEvalCount()); // Print node count
 
-        return bestMove;
+        int validMove = findValidMove(board, bestMove);
+        if (validMove != -1) {
+            return validMove;
+        } else {
+            // Handle the case when no valid move is found (e.g., board is full)
+            // You may want to return a special value or handle it as appropriate for your game.
+            return -1; // Or another suitable value or action
+        }
+    
+    }
+
+    public int findValidMove(Board board, int move) {
+        if (board.isValid(move)) {
+            return move; // Found a valid move
+        } else {
+            int nextMove = move + 1;
+            if (nextMove >= board.width) {
+                nextMove = 0; // Wrap around to the beginning
+            }
+            // Ensure that nextMove is within valid bounds
+            if (nextMove < 0) {
+                nextMove = 0; // Handle case where nextMove becomes negative
+            }
+            // Recursively try the next move
+            return findValidMove(board, nextMove);
+        }
     }
 
     private int minValue(TreeNode node, int depth, int alpha, int beta, int currentPlayer, int opponent) {
