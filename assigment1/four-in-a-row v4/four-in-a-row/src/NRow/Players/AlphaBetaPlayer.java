@@ -118,8 +118,6 @@ public class AlphaBetaPlayer extends PlayerController {
     }
 
     private int evaluatePosition(Board board) {
-        // Implement your static evaluation function here
-        // You can use the provided heuristic object to evaluate the board state
         return heuristic.evaluateBoard(this.playerId, board, gameN);
     }
 

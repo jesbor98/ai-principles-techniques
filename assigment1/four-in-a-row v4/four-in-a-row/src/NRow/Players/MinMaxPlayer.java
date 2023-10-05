@@ -5,12 +5,14 @@ import NRow.Board;
 import NRow.Heuristics.Heuristic;
 import NRow.Game;
 
-public class AlphaBetaPlayer extends PlayerController {
+import java.util.Arrays;
+
+public class MinMaxPlayer extends PlayerController {
     private int depth;
     private TreeNode rootNode;
     private int player2ID;
 
-    public AlphaBetaPlayer(int playerId, int gameN, int depth, Heuristic heuristic) {
+    public MinMaxPlayer(int playerId, int gameN, int depth, Heuristic heuristic) {
         super(playerId, gameN, heuristic);
         this.depth = depth;
         this.rootNode = new TreeNode(null, -1); // Create the root node with a dummy move and null board
@@ -29,15 +31,13 @@ public class AlphaBetaPlayer extends PlayerController {
         }
 
         int bestMove = 0;
-        int alpha = Integer.MIN_VALUE;
-        int beta = Integer.MAX_VALUE;
-        
-        for (TreeNode child : rootNode.getChildren()) {
-            
-            int value = minValue(child, depth, alpha, beta, playerId, player2ID);
+        int bestValue = Integer.MIN_VALUE;
 
-            if (value > alpha) {
-                alpha = value; // Update alpha
+        for (TreeNode child : rootNode.getChildren()) {
+            int value = minValue(child, depth, playerId, player2ID);
+
+            if (value > bestValue) {
+                bestValue = value;
                 bestMove = child.getMove();
             }
         }
@@ -48,7 +48,6 @@ public class AlphaBetaPlayer extends PlayerController {
         } else {
             return 0;
         }
-    
     }
 
     public int findValidMove(Board board, int move) {
@@ -68,47 +67,13 @@ public class AlphaBetaPlayer extends PlayerController {
         }
     }
 
-    private int minValue(TreeNode node, int depth, int alpha, int beta, int currentPlayer, int opponent) {
-        if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return evaluatePosition(node.getBoard());
-        }
-
-        for (TreeNode child : node.getChildren()) {
-            int value = maxValue(child, depth - 1, alpha, beta, currentPlayer, opponent);
-            beta = Math.min(beta, value); // Update beta
-
-            if (alpha >= beta) {
-                return beta; // Alpha-beta pruning
-            }
-        }
-
-        return beta;
-    }
-
-    private int maxValue(TreeNode node, int depth, int alpha, int beta, int currentPlayer, int opponent) {
-        if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return evaluatePosition(node.getBoard());
-        }
-
-        for (TreeNode child : node.getChildren()) {
-            int value = minValue(child, depth - 1, alpha, beta, currentPlayer, opponent);
-            alpha = Math.max(alpha, value); // Update alpha
-
-            if (alpha >= beta) {
-                return alpha; // Alpha-beta pruning
-            }
-        }
-
-        return alpha;
-    }
-
     private void buildTree(TreeNode node, int depth, int currentPlayer) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
             return;
         }
-    
+
         int[] availableMoves = getAvailableMoves(node.getBoard());
-    
+
         for (int move : availableMoves) {
             Board newBoard = node.getBoard().getNewBoard(move, currentPlayer);
             TreeNode childNode = new TreeNode(newBoard, move);
@@ -117,9 +82,37 @@ public class AlphaBetaPlayer extends PlayerController {
         }
     }
 
+    private int minValue(TreeNode node, int depth, int currentPlayer, int opponent) {
+        if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
+            return evaluatePosition(node.getBoard());
+        }
+
+        int bestValue = Integer.MAX_VALUE;
+
+        for (TreeNode child : node.getChildren()) {
+            int value = maxValue(child, depth - 1, currentPlayer, opponent);
+            bestValue = Math.min(bestValue, value);
+        }
+
+        return bestValue;
+    }
+
+    private int maxValue(TreeNode node, int depth, int currentPlayer, int opponent) {
+        if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
+            return evaluatePosition(node.getBoard());
+        }
+
+        int bestValue = Integer.MIN_VALUE;
+
+        for (TreeNode child : node.getChildren()) {
+            int value = minValue(child, depth - 1, currentPlayer, opponent);
+            bestValue = Math.max(bestValue, value);
+        }
+
+        return bestValue;
+    }
+
     private int evaluatePosition(Board board) {
-        // Implement your static evaluation function here
-        // You can use the provided heuristic object to evaluate the board state
         return heuristic.evaluateBoard(this.playerId, board, gameN);
     }
 
@@ -139,5 +132,3 @@ public class AlphaBetaPlayer extends PlayerController {
         return result;
     }
 }
-
-
