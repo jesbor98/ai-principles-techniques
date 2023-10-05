@@ -31,14 +31,17 @@ public class App {
         CustomHeuristic customHeuristic1 = new CustomHeuristic(n);
         CustomHeuristic customHeuristic2 = new CustomHeuristic(n);
 
-        PlayerController human = new HumanPlayer(1, n, customHeuristic1 );
+        PlayerController human = new HumanPlayer(2, n, customHeuristic1 );
         PlayerController human2 = new HumanPlayer(2, n, heuristic2);
 
         //TODO: Implement other PlayerControllers (MinMax, AlphaBeta)
-        PlayerController minMaxPlayer = new MinMaxPlayer(1, n, 5, customHeuristic1); // Adjust the depth as needed
-        PlayerController alphaBetaPlayer = new AlphaBetaPlayer(2, n, 5, customHeuristic1 ); // Adjust the depth as needed
+        PlayerController minMaxPlayer = new MinMaxPlayer(1, n, 2, customHeuristic2); // Adjust the depth as needed
+        PlayerController minMaxPlayer2 = new MinMaxPlayer(2, n, 2, customHeuristic2); // Adjust the depth as needed
+        PlayerController alphaBetaPlayer = new AlphaBetaPlayer(1, n, 5, customHeuristic1 ); // Adjust the depth as needed
+        PlayerController alphaBetaPlayer2 = new AlphaBetaPlayer(2, n, 50, customHeuristic1 ); // Adjust the depth as needed
 
-        PlayerController[] players = { minMaxPlayer, alphaBetaPlayer };
+
+        PlayerController[] players = { minMaxPlayer, alphaBetaPlayer2 };
 
         return players;
     }
