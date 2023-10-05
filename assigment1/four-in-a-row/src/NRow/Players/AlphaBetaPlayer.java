@@ -4,6 +4,7 @@ import NRow.TreeNode;
 import NRow.Board;
 import NRow.Heuristics.Heuristic;
 import NRow.Game;
+import java.util.Arrays;
 
 public class AlphaBetaPlayer extends PlayerController {
     private int depth;
@@ -21,16 +22,20 @@ public class AlphaBetaPlayer extends PlayerController {
     public int makeMove(Board board) {
         int[] availableMoves = getAvailableMoves(board);
         rootNode = new TreeNode(board, -1);
-        buildTree(rootNode, depth, player2ID);
+        buildTree(rootNode, depth, playerId);
 
         if (availableMoves.length == 0) {
             System.out.println("No available moves left.");
-            return -1;
+            return -1; // No valid moves left, return an error value or handle it accordingly
         }
 
-        int bestMove = 0;
-        int alpha = Integer.MIN_VALUE;
-        int beta = Integer.MAX_VALUE;
+        int bestMove = -1;
+        int alpha = Integer.MIN_VALUE; // Initialize alpha
+        int beta = Integer.MAX_VALUE; // Initialize beta
+
+        // Clear the existing child nodes (if any) from the previous move
+      
+
         
         for (TreeNode child : rootNode.getChildren()) {
             
@@ -42,11 +47,15 @@ public class AlphaBetaPlayer extends PlayerController {
             }
         }
 
+        System.out.println("Nodes Expanded for AlphaBeta: " + super.getEvalCount()); // Print node count
+
         int validMove = findValidMove(board, bestMove);
-        if (validMove != 0) {
+        if (validMove != -1) {
             return validMove;
         } else {
-            return 0;
+            // Handle the case when no valid move is found (e.g., board is full)
+            // You may want to return a special value or handle it as appropriate for your game.
+            return -1; // Or another suitable value or action
         }
     
     }
@@ -70,7 +79,7 @@ public class AlphaBetaPlayer extends PlayerController {
 
     private int minValue(TreeNode node, int depth, int alpha, int beta, int currentPlayer, int opponent) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return evaluatePosition(node.getBoard());
+            return evaluatePosition(node.getBoard(), opponent);
         }
 
         for (TreeNode child : node.getChildren()) {
@@ -87,7 +96,7 @@ public class AlphaBetaPlayer extends PlayerController {
 
     private int maxValue(TreeNode node, int depth, int alpha, int beta, int currentPlayer, int opponent) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return evaluatePosition(node.getBoard());
+            return evaluatePosition(node.getBoard(), currentPlayer);
         }
 
         for (TreeNode child : node.getChildren()) {
@@ -117,10 +126,10 @@ public class AlphaBetaPlayer extends PlayerController {
         }
     }
 
-    private int evaluatePosition(Board board) {
+    private int evaluatePosition(Board board, int playerId) {
         // Implement your static evaluation function here
         // You can use the provided heuristic object to evaluate the board state
-        return heuristic.evaluateBoard(this.playerId, board, gameN);
+        return heuristic.evaluateBoard(playerId, board, gameN);
     }
 
     private int[] getAvailableMoves(Board board) {
