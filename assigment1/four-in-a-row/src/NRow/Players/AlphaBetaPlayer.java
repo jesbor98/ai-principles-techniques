@@ -16,29 +16,34 @@ public class AlphaBetaPlayer extends PlayerController {
         this.depth = depth;
         this.rootNode = new TreeNode(null, -1); // Create the root node with a dummy move and null board
         this.player2ID = (playerId == 1) ? 2 : 1; // Set player2ID based on playerId
-
     }
 
     @Override
     public int makeMove(Board board) {
         int[] availableMoves = getAvailableMoves(board);
+        rootNode = new TreeNode(board, -1);
+        buildTree(rootNode, depth, playerId);
+
+        if (availableMoves.length == 0) {
+            System.out.println("No available moves left.");
+            return -1; // No valid moves left, return an error value or handle it accordingly
+        }
 
         int bestMove = -1;
         int alpha = Integer.MIN_VALUE; // Initialize alpha
         int beta = Integer.MAX_VALUE; // Initialize beta
 
         // Clear the existing child nodes (if any) from the previous move
-       
+      
 
-        for (int move : availableMoves) {
-            Board newBoard = board.getNewBoard(move, playerId);
-            TreeNode childNode = new TreeNode(newBoard, move);
-            rootNode.addChild(childNode);
-            int value = minValue(childNode, depth - 1, alpha, beta, playerId, player2ID);
+        
+        for (TreeNode child : rootNode.getChildren()) {
+            
+            int value = minValue(child, depth, alpha, beta, playerId, player2ID);
 
             if (value > alpha) {
                 alpha = value; // Update alpha
-                bestMove = move;
+                bestMove = child.getMove();
             }
         }
 
@@ -47,15 +52,30 @@ public class AlphaBetaPlayer extends PlayerController {
         return bestMove;
     }
 
-    private int maxValue(TreeNode node, int depth, int alpha, int beta, int playerId) {
-        System.out.println("Expanding node: " + super.getEvalCount()); // Add this line for debugging
-
+    private int minValue(TreeNode node, int depth, int alpha, int beta, int currentPlayer, int opponent) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return evaluatePosition(node.getBoard(), playerId);
+            return evaluatePosition(node.getBoard(), opponent);
         }
 
         for (TreeNode child : node.getChildren()) {
-            int value = minValue(child, depth - 1, alpha, beta, playerId, player2ID);
+            int value = maxValue(child, depth - 1, alpha, beta, currentPlayer, opponent);
+            beta = Math.min(beta, value); // Update beta
+
+            if (alpha >= beta) {
+                return beta; // Alpha-beta pruning
+            }
+        }
+
+        return beta;
+    }
+
+    private int maxValue(TreeNode node, int depth, int alpha, int beta, int currentPlayer, int opponent) {
+        if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
+            return evaluatePosition(node.getBoard(), currentPlayer);
+        }
+
+        for (TreeNode child : node.getChildren()) {
+            int value = minValue(child, depth - 1, alpha, beta, currentPlayer, opponent);
             alpha = Math.max(alpha, value); // Update alpha
 
             if (alpha >= beta) {
@@ -66,23 +86,19 @@ public class AlphaBetaPlayer extends PlayerController {
         return alpha;
     }
 
-    private int minValue(TreeNode node, int depth, int alpha, int beta, int playerId, int player2ID) {
-        System.out.println("Expanding node: " + super.getEvalCount()); // Add this line for debugging
-
+    private void buildTree(TreeNode node, int depth, int currentPlayer) {
         if (depth == 0 || Game.winning(node.getBoard().getBoardState(), gameN) != 0) {
-            return evaluatePosition(node.getBoard(), player2ID);
+            return;
         }
-
-        for (TreeNode child : node.getChildren()) {
-            int value = maxValue(child, depth - 1, alpha, beta, playerId);
-            beta = Math.min(beta, value); // Update beta
-
-            if (alpha >= beta) {
-                return beta; // Alpha-beta pruning
-            }
+    
+        int[] availableMoves = getAvailableMoves(node.getBoard());
+    
+        for (int move : availableMoves) {
+            Board newBoard = node.getBoard().getNewBoard(move, currentPlayer);
+            TreeNode childNode = new TreeNode(newBoard, move);
+            node.addChild(childNode);
+            buildTree(childNode, depth - 1, (currentPlayer == playerId) ? player2ID : playerId);
         }
-
-        return beta;
     }
 
     private int evaluatePosition(Board board, int playerId) {
@@ -107,4 +123,5 @@ public class AlphaBetaPlayer extends PlayerController {
         return result;
     }
 }
+
 
