@@ -4,42 +4,37 @@ import NRow.TreeNode;
 import NRow.Board;
 import NRow.Heuristics.Heuristic;
 import NRow.Game;
-import java.util.Arrays;
 
 public class AlphaBetaPlayer extends PlayerController {
     private int depth;
     private TreeNode rootNode;
-    private int player2ID;
+    private int player2Id;
 
     public AlphaBetaPlayer(int playerId, int gameN, int depth, Heuristic heuristic) {
         super(playerId, gameN, heuristic);
         this.depth = depth;
-        this.rootNode = new TreeNode(null, -1); // Create the root node with a dummy move and null board
-        this.player2ID = (playerId == 1) ? 2 : 1; // Set player2ID based on playerId
+        this.rootNode = new TreeNode(null, -1);
+        this.player2Id = (playerId == 1) ? 2 : 1; // Set player2ID based on playerId
     }
 
     @Override
     public int makeMove(Board board) {
         int[] availableMoves = getAvailableMoves(board);
         rootNode = new TreeNode(board, -1);
-        buildTree(rootNode, depth, playerId);
+        buildTree(rootNode, depth, player2Id);
 
         if (availableMoves.length == 0) {
             System.out.println("No available moves left.");
-            return -1; // No valid moves left, return an error value or handle it accordingly
+            return -1;
         }
 
         int bestMove = -1;
-        int alpha = Integer.MIN_VALUE; // Initialize alpha
-        int beta = Integer.MAX_VALUE; // Initialize beta
+        int alpha = Integer.MIN_VALUE;
+        int beta = Integer.MAX_VALUE;
 
-        // Clear the existing child nodes (if any) from the previous move
-      
-
-        
         for (TreeNode child : rootNode.getChildren()) {
             
-            int value = minValue(child, depth, alpha, beta, playerId, player2ID);
+            int value = minValue(child, depth, alpha, beta, playerId, player2Id);
 
             if (value > alpha) {
                 alpha = value; // Update alpha
@@ -47,15 +42,11 @@ public class AlphaBetaPlayer extends PlayerController {
             }
         }
 
-        System.out.println("Nodes Expanded for AlphaBeta: " + super.getEvalCount()); // Print node count
-
         int validMove = findValidMove(board, bestMove);
         if (validMove != -1) {
             return validMove;
         } else {
-            // Handle the case when no valid move is found (e.g., board is full)
-            // You may want to return a special value or handle it as appropriate for your game.
-            return -1; // Or another suitable value or action
+            return -1;
         }
     
     }
@@ -122,13 +113,11 @@ public class AlphaBetaPlayer extends PlayerController {
             Board newBoard = node.getBoard().getNewBoard(move, currentPlayer);
             TreeNode childNode = new TreeNode(newBoard, move);
             node.addChild(childNode);
-            buildTree(childNode, depth - 1, (currentPlayer == playerId) ? player2ID : playerId);
+            buildTree(childNode, depth - 1, (currentPlayer == playerId) ? player2Id : playerId);
         }
     }
 
     private int evaluatePosition(Board board, int playerId) {
-        // Implement your static evaluation function here
-        // You can use the provided heuristic object to evaluate the board state
         return heuristic.evaluateBoard(playerId, board, gameN);
     }
 

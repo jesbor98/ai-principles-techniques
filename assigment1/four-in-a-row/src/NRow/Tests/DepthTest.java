@@ -1,7 +1,6 @@
 package NRow.Tests;
 
 import NRow.Players.*;
-import NRow.Board;
 import NRow.Game;
 import NRow.Heuristics.*;
 
@@ -11,7 +10,7 @@ public class DepthTest {
     private static int boardHeight = 5;
 
     public static void main(String[] args) {
-        int[] depths = {1, 3, 5, 6};
+        int[] depths = {3, 4, 5, 6};
 
         for (int depth : depths) {
             PlayerController[] players = createPlayers(depth);
@@ -27,8 +26,11 @@ public class DepthTest {
         CustomHeuristic customHeuristic1 = new CustomHeuristic(gameN);
         CustomHeuristic customHeuristic2 = new CustomHeuristic(gameN);
 
-        PlayerController minMaxPlayer = new MinMaxPlayer(1, gameN, depth, customHeuristic1);
-        PlayerController alphaBetaPlayer = new AlphaBetaPlayer(2, gameN, depth, customHeuristic2);
+        SimpleHeuristic simple1 = new SimpleHeuristic(gameN);
+        SimpleHeuristic simple2 = new SimpleHeuristic(gameN);
+
+        PlayerController minMaxPlayer = new MinMaxPlayer(1, gameN, depth, simple1);
+        PlayerController alphaBetaPlayer = new AlphaBetaPlayer(2, gameN, depth, simple2);
 
         PlayerController[] players = { minMaxPlayer, alphaBetaPlayer };
 
