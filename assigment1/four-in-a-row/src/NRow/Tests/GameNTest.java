@@ -1,13 +1,20 @@
 /**
- * The GameNTest class is responsible for testing different values of 'N' (the number of consecutive pieces to win) in a game of  N in a Row.
- * It creates game instances with varying 'N' values and players to analyze how different 'N' values affect gameplay.
+ * Artificial Intelligence: Principles & Techniques
+ * Authors: Amanda Enhörning (s1128126) and Jessica Borg (s1129470)
+ * Assignment 1: N-in-a-Row
+ * 6 October 2023
  */
+
 package NRow.Tests;
 
 import NRow.Players.*;
 import NRow.Game;
 import NRow.Heuristics.*;
 
+/**
+ * The GameNTest class is responsible for testing different values of 'N' (the number of consecutive pieces to win) in a game of  N in a Row.
+ * It creates game instances with varying 'N' values and players to analyze how different 'N' values affect gameplay.
+ */
 public class GameNTest {
     private static int depth = 3;
     private static int boardWidth = 7;

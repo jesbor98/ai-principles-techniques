@@ -1,13 +1,20 @@
 /**
- * The RuntimeComplexityTest class is responsible for testing the runtime complexity of the N in a Row game with varying depths and board sizes.
- * It measures how the execution time of the game changes as the search depth and board dimensions change.
+ * Artificial Intelligence: Principles & Techniques
+ * Authors: Amanda Enhörning (s1128126) and Jessica Borg (s1129470)
+ * Assignment 1: N-in-a-Row
+ * 6 October 2023
  */
+
 package NRow.Tests;
 
 import NRow.Players.*;
 import NRow.Heuristics.CustomHeuristic;
 import NRow.Game;
 
+/**
+ * The RuntimeComplexityTest class is responsible for testing the runtime complexity of the N in a Row game with varying depths and board sizes.
+ * It measures how the execution time of the game changes as the search depth and board dimensions change.
+ */
 public class RuntimeComplexityTest {
     private static int gameN = 4;
 

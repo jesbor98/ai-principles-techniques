@@ -1,3 +1,10 @@
+/**
+ * Artificial Intelligence: Principles & Techniques
+ * Authors: Amanda Enhörning (s1128126) and Jessica Borg (s1129470)
+ * Assignment 1: N-in-a-Row
+ * 6 October 2023
+ */
+
 package NRow;
 
 import NRow.Heuristics.CustomHeuristic;
@@ -21,7 +28,7 @@ public class App {
 
     /**
      * Determine the players for the game
-     * @param n
+     * @param n which represents the number of game pieces in a row that is needed to win
      * @return an array of size 2 with two Playercontrollers
      */
     private static PlayerController[] getPlayers(int n) {
@@ -34,12 +41,10 @@ public class App {
         PlayerController human = new HumanPlayer(2, n, customHeuristic1 );
         PlayerController human2 = new HumanPlayer(2, n, customHeuristic1);
 
-        //TODO: Implement other PlayerControllers (MinMax, AlphaBeta)
         PlayerController minMaxPlayer = new MinMaxPlayer(1, n, 3, customHeuristic2); // Adjust the depth as needed
-        PlayerController minMaxPlayer2 = new MinMaxPlayer(2, n, 3, customHeuristic1); // Adjust the depth as needed
-        PlayerController alphaBetaPlayer = new AlphaBetaPlayer(1, n, 3, customHeuristic1 ); // Adjust the depth as needed
+        PlayerController minMaxPlayer2 = new MinMaxPlayer(2, n, 4, customHeuristic2); // Adjust the depth as needed
+        PlayerController alphaBetaPlayer = new AlphaBetaPlayer(1, n, 4, customHeuristic1 ); // Adjust the depth as needed
         PlayerController alphaBetaPlayer2 = new AlphaBetaPlayer(2, n, 3, customHeuristic1 ); // Adjust the depth as needed
-
 
         PlayerController[] players = { minMaxPlayer, alphaBetaPlayer2 };
 

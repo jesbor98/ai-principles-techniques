@@ -1,13 +1,20 @@
 /**
- * The DepthTest class is responsible for testing different depth levels for the MinMax and AlphaBeta players in a game of N in a Row.
- * It creates game instances with varying depths and players to analyze how different depths affect gameplay.
+ * Artificial Intelligence: Principles & Techniques
+ * Authors: Amanda Enhörning (s1128126) and Jessica Borg (s1129470)
+ * Assignment 1: N-in-a-Row
+ * 6 October 2023
  */
+
 package NRow.Tests;
 
 import NRow.Players.*;
 import NRow.Game;
 import NRow.Heuristics.*;
 
+/**
+ * The DepthTest class is responsible for testing different depth levels for the MinMax and AlphaBeta players in a game of N in a Row.
+ * It creates game instances with varying depths and players to analyze how different depths affect gameplay.
+ */
 public class DepthTest {
     private static int gameN = 4;
     private static int boardWidth = 7;
