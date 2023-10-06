@@ -1,3 +1,8 @@
+/**
+ * The BoardSizeTest class is responsible for testing different board sizes in a game of N in a Row.
+ * It creates various game boards with different dimensions and allows different players to compete.
+ * The purpose is to assess the performance and behavior of the players on boards of varying sizes.
+ */
 package NRow.Tests;
 
 import NRow.Players.*;
@@ -7,9 +12,11 @@ import NRow.Heuristics.*;
 public class BoardSizeTest {
     private static int gameN = 4;
     private static int depth = 3;
-    //private static int boardWidth = 7;
-    //private static int boardHeight = 5;
 
+    /**
+     * The main method of the BoardSizeTest class.
+     * It initializes different board sizes and players, then runs games on each board size.
+     */
     public static void main(String[] args) {
         int[] boardWidths = {5, 7, 9};
         int[] boardHeights = {5, 7, 9};
@@ -26,6 +33,11 @@ public class BoardSizeTest {
         }
     }
 
+    /**
+     * Creates and initializes player controllers for the game.
+     *
+     * @return An array of player controllers for the game.
+     */
     private static PlayerController[] createPlayers() {
         CustomHeuristic customHeuristic1 = new CustomHeuristic(gameN);
         CustomHeuristic customHeuristic2 = new CustomHeuristic(gameN);

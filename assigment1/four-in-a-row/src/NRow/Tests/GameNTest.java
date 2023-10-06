@@ -1,3 +1,7 @@
+/**
+ * The GameNTest class is responsible for testing different values of 'N' (the number of consecutive pieces to win) in a game of  N in a Row.
+ * It creates game instances with varying 'N' values and players to analyze how different 'N' values affect gameplay.
+ */
 package NRow.Tests;
 
 import NRow.Players.*;
@@ -9,6 +13,10 @@ public class GameNTest {
     private static int boardWidth = 7;
     private static int boardHeight = 5;
 
+    /**
+     * The main method of the GameNTest class.
+     * It initializes different 'N' values for the game and runs games with these configurations.
+     */
     public static void main(String[] args) {
         int[] gameNs = {2, 3, 4, 5};
 
@@ -22,6 +30,12 @@ public class GameNTest {
         }
     }
 
+    /**
+     * Creates and initializes player controllers for the game with a specified 'N' value.
+     *
+     * @param gameN The 'N' value to set for the game.
+     * @return An array of player controllers for the game with the specified 'N' value.
+     */
     private static PlayerController[] createPlayers(int gameN) {
         CustomHeuristic customHeuristic1 = new CustomHeuristic(gameN);
         CustomHeuristic customHeuristic2 = new CustomHeuristic(gameN);
