@@ -21,7 +21,7 @@ public class MinMaxPlayer extends PlayerController {
 public int makeMove(Board board) {
     int[] availableMoves = getAvailableMoves(board);
     rootNode = new TreeNode(board, -1);
-    buildTree(rootNode, depth, player2Id);
+    buildTree(rootNode, depth, playerId);
 
     if (availableMoves.length == 0) {
         System.out.println("No available moves left.");

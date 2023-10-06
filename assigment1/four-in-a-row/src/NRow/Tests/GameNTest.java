@@ -4,25 +4,25 @@ import NRow.Players.*;
 import NRow.Game;
 import NRow.Heuristics.*;
 
-public class DepthTest {
-    private static int gameN = 4;
+public class GameNTest {
+    private static int depth = 3;
     private static int boardWidth = 7;
     private static int boardHeight = 5;
 
     public static void main(String[] args) {
-        int[] depths = {3, 4, 5, 6, 7};
+        int[] gameNs = {2, 3, 4, 5};
 
-        for (int depth : depths) {
-            PlayerController[] players = createPlayers(depth);
+        for (int gameN : gameNs) {
+            PlayerController[] players = createPlayers(gameN);
 
-            System.out.println("Depth " + depth + ":");
+            System.out.println("GameN " + gameN + ":");
             Game game = new Game(gameN, boardWidth, boardHeight, players);
             game.startGame();
             System.out.println();
         }
     }
 
-    private static PlayerController[] createPlayers(int depth) {
+    private static PlayerController[] createPlayers(int gameN) {
         CustomHeuristic customHeuristic1 = new CustomHeuristic(gameN);
         CustomHeuristic customHeuristic2 = new CustomHeuristic(gameN);
 
