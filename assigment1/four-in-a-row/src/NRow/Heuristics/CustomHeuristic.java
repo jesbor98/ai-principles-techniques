@@ -5,7 +5,6 @@ import NRow.Game;
 
 /**
  * The CustomHeuristic class provides a custom heuristic function for evaluating game states.
- *
  * This heuristic considers factors such as consecutive pieces, blocking opponents, and encouraging
  * the completion of rows to assign a utility value to a game state.
  */
@@ -13,7 +12,6 @@ public class CustomHeuristic extends Heuristic {
 
     /**
      * Constructs a new CustomHeuristic with the specified game parameter.
-     *
      * @param gameN The value of N for the game.
      */
     public CustomHeuristic(int gameN) {
@@ -22,7 +20,6 @@ public class CustomHeuristic extends Heuristic {
 
     /**
      * Gets the name of the heuristic.
-     *
      * @return The name of the heuristic.
      */
     @Override
@@ -33,7 +30,6 @@ public class CustomHeuristic extends Heuristic {
 
      /**
      * Evaluates a game state and assigns a utility value.
-     *
      * @param player The player for whom the utility is calculated.
      * @param board The game board state.
      * @param gameN The value of N for the game.
@@ -97,8 +93,8 @@ public class CustomHeuristic extends Heuristic {
                             int newRow = i + side * rowDir;
                             int newCol = j + side * colDir;
 
-                            int playerInRow = 0;  // Count the number of consecutive player's pieces in a row
-                            int opponentInRow = 0;  // Count the number of consecutive opponent's pieces in a row
+                            int playerInRow = 0;  // Consecutive player's pieces in a row
+                            int opponentInRow = 0;  // Consecutive opponent's pieces in a row
 
                             // Check in one direction
                             while (newRow >= 0 && newRow < boardState.length && newCol >= 0 && newCol < boardState[0].length) {
@@ -131,7 +127,7 @@ public class CustomHeuristic extends Heuristic {
                                 }
                             }
 
-                            // Check if blocking the opponent from winning or a winning move for the player
+                            // Check if blocking the opponent from winning/winning move
                             if (opponentInRow >= gameN - 1) {
                                 utility = Integer.MIN_VALUE;
                                 break;
@@ -142,7 +138,7 @@ public class CustomHeuristic extends Heuristic {
                         }
                     }
 
-                    // Suggest moves that maximize the player's chances of winning or blocking
+                    // Suggest moves that maximize the player's chances of winning/blocking
                     utility += playerRowScore(player, i, j, boardState, gameN);
                     maxUtility = Math.max(maxUtility, utility);
                 }
@@ -154,7 +150,6 @@ public class CustomHeuristic extends Heuristic {
 
     /**
      * Assigns a score to the current player's row to encourage completing rows.
-     *
      * @param player The player for whom the score is calculated.
      * @param row The row index on the game board.
      * @param col The column index on the game board.

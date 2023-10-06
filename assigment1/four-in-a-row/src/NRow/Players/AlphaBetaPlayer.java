@@ -12,7 +12,6 @@ public class AlphaBetaPlayer extends PlayerController {
 
     /**
      * Constructs a new AlphaBetaPlayer with the specified parameters.
-     *
      * @param playerId The ID of the player.
      * @param gameN The value of N for the game.
      * @param depth The depth for the Alpha-Beta search.
@@ -27,7 +26,6 @@ public class AlphaBetaPlayer extends PlayerController {
 
     /**
      * Makes a move based on the current game state.
-     *
      * @param board The current game board.
      * @return The column index where the player intends to make a move.
      */
@@ -65,31 +63,29 @@ public class AlphaBetaPlayer extends PlayerController {
 
     /**
      * Finds a valid move on the board, considering wrap-around.
-     *
      * @param board The current game board.
      * @param move The proposed move.
      * @return A valid move after considering wrap-around, or -1 if no valid move is found.
      */
     public int findValidMove(Board board, int move) {
         if (board.isValid(move)) {
-            return move; // Found a valid move
+            return move;
         } else {
             int nextMove = move + 1;
             if (nextMove >= board.width) {
                 nextMove = 0; // Wrap around to the beginning
             }
-            // Ensure that nextMove is within valid bounds
+            // Ensure nextMove is within valid bounds
             if (nextMove < 0) {
                 nextMove = 0; // Handle case where nextMove becomes negative
             }
-            // Recursively try the next move
+         
             return findValidMove(board, nextMove);
         }
     }
 
     /**
      * Computes the minimum value for the Minimax algorithm with Alpha-Beta pruning.
-     *
      * @param node The current node in the game tree.
      * @param depth The remaining depth for the search.
      * @param alpha The alpha value for pruning.
@@ -105,7 +101,7 @@ public class AlphaBetaPlayer extends PlayerController {
 
         for (TreeNode child : node.getChildren()) {
             int value = maxValue(child, depth - 1, alpha, beta, currentPlayer, opponent);
-            beta = Math.min(beta, value); // Update beta
+            beta = Math.min(beta, value);
 
             if (alpha >= beta) {
                 return beta; // Alpha-beta pruning
@@ -117,7 +113,6 @@ public class AlphaBetaPlayer extends PlayerController {
 
     /**
      * Computes the maximum value for the Minimax algorithm with Alpha-Beta pruning.
-     *
      * @param node The current node in the game tree.
      * @param depth The remaining depth for the search.
      * @param alpha The alpha value for pruning.
@@ -145,7 +140,6 @@ public class AlphaBetaPlayer extends PlayerController {
 
     /**
      * Builds the game tree using recursion.
-     *
      * @param node The current node in the game tree.
      * @param depth The remaining depth for tree expansion.
      * @param currentPlayer The ID of the current player.
@@ -167,7 +161,6 @@ public class AlphaBetaPlayer extends PlayerController {
 
     /**
      * Evaluates the current game board position for a player.
-     *
      * @param board The current game board.
      * @param playerId The ID of the player for whom the position is evaluated.
      * @return The evaluation score of the board position for the player.
@@ -178,7 +171,6 @@ public class AlphaBetaPlayer extends PlayerController {
 
     /**
      * Retrieves an array of available moves on the current game board.
-     *
      * @param board The current game board.
      * @return An array containing column indices of available moves.
      */

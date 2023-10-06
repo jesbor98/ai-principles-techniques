@@ -12,7 +12,6 @@ public class MinMaxPlayer extends PlayerController {
 
     /**
      * Constructs a MinMaxPlayer with the specified parameters.
-     *
      * @param playerId The ID of the player.
      * @param gameN The value of N for the game.
      * @param depth The depth of the search tree.
@@ -21,13 +20,12 @@ public class MinMaxPlayer extends PlayerController {
     public MinMaxPlayer(int playerId, int gameN, int depth, Heuristic heuristic) {
         super(playerId, gameN, heuristic);
         this.depth = depth;
-        this.rootNode = new TreeNode(null, -1); // Create the root node with a dummy move and null board
+        this.rootNode = new TreeNode(null, -1);
         this.player2Id = (playerId == 1) ? 2 : 1; // Set player2ID based on playerId
     }
 
     /**
      * Makes a move by selecting the best move using the Minimax algorithm.
-     *
      * @param board The current game board.
      * @return The selected move.
      */
@@ -64,7 +62,6 @@ public class MinMaxPlayer extends PlayerController {
 
     /**
      * Finds a valid move starting from the specified move and wrapping around if needed.
-     *
      * @param board The current game board.
      * @param move The initial move to start searching from.
      * @return A valid move.
@@ -77,18 +74,17 @@ public class MinMaxPlayer extends PlayerController {
             if (nextMove >= board.width) {
                 nextMove = 0; // Wrap around to the beginning
             }
-            // Ensure that nextMove is within valid bounds
+            // Ensure nextMove is within valid bounds
             if (nextMove < 0) {
                 nextMove = 0; // Handle case where nextMove becomes negative
             }
-            // Recursively try the next move
+       
             return findValidMove(board, nextMove);
         }
     }
 
     /**
      * Builds the game tree up to a specified depth, exploring possible moves for the current player.
-     *
      * @param node The current node of the game tree.
      * @param depth The maximum depth to explore.
      * @param currentPlayer The ID of the current player.
@@ -110,7 +106,6 @@ public class MinMaxPlayer extends PlayerController {
 
     /**
      * Computes the minimum value for a node in the Minimax algorithm.
-     *
      * @param node The current node in the game tree.
      * @param depth The remaining depth to explore.
      * @param currentPlayer The ID of the current player.
@@ -134,7 +129,6 @@ public class MinMaxPlayer extends PlayerController {
 
     /**
      * Computes the maximum value for a node in the Minimax algorithm.
-     *
      * @param node The current node in the game tree.
      * @param depth The remaining depth to explore.
      * @param currentPlayer The ID of the current player.
@@ -158,7 +152,6 @@ public class MinMaxPlayer extends PlayerController {
 
     /**
      * Evaluates the position of the game board for a given player using a heuristic function.
-     *
      * @param board The game board to evaluate.
      * @param playerId The ID of the player for whom to evaluate the board.
      * @return The evaluation score of the board.
@@ -169,7 +162,6 @@ public class MinMaxPlayer extends PlayerController {
 
     /**
      * Retrieves an array of available moves on the current game board.
-     *
      * @param board The current game board.
      * @return An array of available moves.
      */
