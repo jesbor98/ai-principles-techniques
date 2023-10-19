@@ -1,3 +1,10 @@
+/**
+ * Artificial Intelligence: Principles & Techniques
+ * Authors: Amanda Enhörning (s1128126) and Jessica Borg (s1129470)
+ * Assignment 1: N-in-a-Row
+ * 6 October 2023
+ */
+
 package NRow.Heuristics;
 
 import NRow.Board;
