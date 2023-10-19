@@ -1,0 +1,21 @@
+To help you get an overview, here is the assignment broken down in parts:
+0. Become familiar with the given code and understand the AC-3 algorithm. What are the
+Variables, where are the Domains stored? How can you access these?
+
+1. Find a good representation of the constraints and initialize all constraints.
+
+2. Implement the AC-3 algorithm as discussed in the lecture, build a function that can verify the
+output of AC-3, and output some complexity measure of AC-3.
+
+3. Experiment with multiple heuristics for the queue (minimum remaining values, priority to
+constraints that have arcs to finalized fields, etc.) and how these influence the complexity of
+the algorithm. Do so for all the given sudoku files.
+
+Bonus points are offered for a working python implementation that can read the same input 
+(1 bonus point extra; grade becomes 0.5 higher), and 
+if you experiment with different constraints (also 1 bonus point).
+
+Be sure to use informative names for variables, constants, and functions, and to document your
+code well. You may use libraries and pre-defined data structures etc. of course, as long as you
+implement the AC-3 algorithm yourself (e.g., using a PriorityQueue is OK). It is advised to make this
+assignment in pairs.
