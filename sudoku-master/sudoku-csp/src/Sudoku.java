@@ -1,5 +1,7 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Sudoku {
@@ -30,47 +32,78 @@ public class Sudoku {
     return output;
   }
 
-  /**
-	 * Reads sudoku from file
-	 * @param filename
-	 * @return 2d int array of the sudoku
-	 */
-	public static Field[][] readsudoku(String filename) {
-		assert filename != null && filename != "" : "Invalid filename";
-		String line = "";
-		Field[][] grid = new Field[9][9];
-		try {
-		FileInputStream inputStream = new FileInputStream(filename);
+  public static Field[][] readsudoku(String filename) {
+    assert filename != null && !filename.isEmpty() : "Invalid filename";
+    String line = "";
+    Field[][] grid = new Field[9][9];
+
+    // Initialize all fields first
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            grid[i][j] = new Field();
+        }
+    }
+
+    try {
+        FileInputStream inputStream = new FileInputStream(filename);
         Scanner scanner = new Scanner(inputStream);
-        for(int i = 0; i < 9; i++) {
-        	if(scanner.hasNext()) {
-        		line = scanner.nextLine();
-        		for(int j = 0; j < 9; j++) {
-              int numValue = Character.getNumericValue(line.charAt(j));
-              if(numValue == 0) {
-                grid[i][j] = new Field();
-              } else if (numValue != -1) {
-                grid[i][j] = new Field(numValue);
-        			}
-        		}
-        	}
+        for (int i = 0; i < 9; i++) {
+            if (scanner.hasNext()) {
+                line = scanner.nextLine();
+                for (int j = 0; j < 9; j++) {
+                    int numValue = Character.getNumericValue(line.charAt(j));
+                    if (numValue != 0) {
+                        grid[i][j].setValue(numValue);
+                    }
+                }
+            }
         }
         scanner.close();
-		}
-		catch (FileNotFoundException e) {
-			System.out.println("error opening file: "+filename);
-		}
-    addNeighbours(grid);
-		return grid;
-	}
+    } catch (FileNotFoundException e) {
+        System.out.println("Error opening file: " + filename);
+    }
 
-  /**
-   * Adds a list of neighbours to each field, i.e., arcs to be satisfied
-   * @param grid
-   */
+    // Now, add neighbors to the initialized fields
+    addNeighbours(grid);
+
+    return grid;
+}
+
+
   private static void addNeighbours(Field[][] grid) {
-    // TODO: for each field, add its neighbours
-  }
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            grid[i][j].setNeighbours(new ArrayList<>()); // Initialize the neighbors list for the current field
+
+            // Add row neighbors
+            for (int k = 0; k < 9; k++) {
+                if (k != j) {
+                    grid[i][j].getNeighbours().add(grid[i][k]);
+                }
+            }
+
+            // Add column neighbors
+            for (int k = 0; k < 9; k++) {
+                if (k != i) {
+                    grid[i][j].getNeighbours().add(grid[k][j]);
+                }
+            }
+
+            // Add box neighbors
+            int boxRow = i / 3 * 3;
+            int boxCol = j / 3 * 3;
+            for (int x = boxRow; x < boxRow + 3; x++) {
+                for (int y = boxCol; y < boxCol + 3; y++) {
+                    if (x != i && y != j) {
+                        grid[i][j].getNeighbours().add(grid[x][y]);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
   /**
 	 * Generates fileformat output

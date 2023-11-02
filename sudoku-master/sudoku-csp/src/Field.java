@@ -16,13 +16,16 @@ public class Field {
   Field() {
     this.domain = new ArrayList<>(9);
     for (int i = 1; i < 10; i++)
-      this.domain.add(i);
+        this.domain.add(i);
+
+    this.neighbours = new ArrayList<>(); // Initialize the neighbors list
   }
 
   // Constructor in case the field is known, i.e., it contains a value
   Field(int initValue) {
     this.value = initValue;
     this.domain = new ArrayList<>();
+    this.neighbours = new ArrayList<>(); // Initialize the neighbors list
   }
 
   /*
