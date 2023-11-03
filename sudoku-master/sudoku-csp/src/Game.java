@@ -19,76 +19,6 @@ public class Game {
     return iterations;
 }
 
-  public boolean solve() {
-    return backtrack(0, 0); // Start from the top-left corner (0,0).
-}
-
-private boolean backtrack(int row, int col) {
-    iterations++; // Increment the iteration count at the beginning of each call.
-
-    if (row == 9) {
-        // If we reach this point, the puzzle is solved.
-        return true;
-    }
-
-    if (col == 9) {
-        // Move to the next row if we reach the end of a row.
-        return backtrack(row + 1, 0);
-    }
-
-    Field field = sudoku.getBoard()[row][col];
-    if (field.getValue() != 0) {
-        // If the field is already filled, move to the next column.
-        return backtrack(row, col + 1);
-    }
-
-    for (int value = 1; value <= 9; value++) {
-        if (isValidMove(row, col, value)) {
-            // Make a move if it's valid.
-            field.setValue(value);
-
-            if (backtrack(row, col + 1)) {
-                return true; // Move to the next column.
-            }
-
-            // If the move doesn't lead to a solution, reset the field.
-            field.resetField();
-        }
-    }
-    
-    return false; // No solution found at this position.
-}
-
-
-private boolean isValidMove(int row, int col, int value) {
-    // Check row
-    for (int i = 0; i < 9; i++) {
-        if (sudoku.getBoard()[row][i].getValue() == value) {
-            return false;
-        }
-    }
-    
-    // Check column
-    for (int i = 0; i < 9; i++) {
-        if (sudoku.getBoard()[i][col].getValue() == value) {
-            return false;
-        }
-    }
-    
-    // Check 3x3 box
-    int boxRow = row / 3 * 3;
-    int boxCol = col / 3 * 3;
-    for (int i = boxRow; i < boxRow + 3; i++) {
-        for (int j = boxCol; j < boxCol + 3; j++) {
-            if (sudoku.getBoard()[i][j].getValue() == value) {
-                return false;
-            }
-        }
-    }
-    
-    return true; // The value is valid at this position.
-}
-
 
     public boolean validSolution() {
         Field[][] board = sudoku.getBoard();
@@ -199,9 +129,6 @@ private boolean isValidMove(int row, int col, int value) {
             } else {
                 System.out.println("Sudoku is solvable but not valid.");
             }
-        
-            int iterationCount = getIterations();
-            System.out.println("Number of iterations (AC-3 backtracking): " + iterationCount);
         
         } else {
             System.out.println("Sudoku is not solvable.");
