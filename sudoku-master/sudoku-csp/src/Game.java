@@ -1,4 +1,7 @@
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class Game {
@@ -115,15 +118,123 @@ public class Game {
 
             }
         }
-    
         System.out.println("Number of iterations (AC-3): " + iterations); // Print the number of iterations
-
         return true; // Sudoku is solvable according to AC-3
+    }
+
+    public boolean solveAC3MRV() {
+        int iterations = 0; // Initialize the iteration counter
+        Queue<Field> queue = new LinkedList<>();
+    
+        // Initialize the queue with fields in a minimum remaining values (MRV) order
+        List<Field> fields = getFieldsInMRVOrder(); // Implement your MRV heuristic
+        queue.addAll(fields);
+    
+        // Process the queue
+        while (!queue.isEmpty()) {
+            Field field = queue.poll();
+    
+            if (field.getDomainSize() == 0) {
+                return false; // Inconsistency, AC-3 with MRV fails
+            }
+    
+            // If the domain has only one value, assign it and propagate constraints
+            if (field.getDomainSize() == 1) {
+                int value = field.getDomain().get(0);
+                field.setValue(value);
+    
+                // Remove the assigned value from neighbors' domains
+                for (Field neighbor : field.getNeighbours()) {
+                    if (neighbor.removeFromDomain(value)) {
+                        queue.add(neighbor);
+                    }
+                }
+                iterations++; // Increment the iteration counter
+            }
+        }
+    
+        System.out.println("Number of iterations (AC-3 with MRV): " + iterations); // Print the number of iterations
+    
+        return true; // Sudoku is solvable according to AC-3 with MRV
+    }
+
+    private List<Field> getFieldsInMRVOrder() {
+        List<Field> fields = new ArrayList<>();
+        for (Field[] row : sudoku.getBoard()) {
+            for (Field field : row) {
+                if (field.getValue() == 0) {
+                    fields.add(field);
+                }
+            }
+        }
+    
+        fields.sort(Comparator.comparingInt(Field::getDomainSize)); // Sort by domain size in ascending order
+        return fields;
     }
     
 
+    public boolean solveAC3WithPriority() {
+        int iterations = 0; // Initialize the iteration counter
+        Queue<Field> queue = new LinkedList<>();
+    
+        // Initialize the queue with all fields, but prioritize constraints with arcs to finalized fields
+        for (Field[] row : sudoku.getBoard()) {
+            for (Field field : row) {
+                if (field.getValue() != 0) {
+                    // Remove the assigned value from neighbors' domains
+                    for (Field neighbor : field.getNeighbours()) {
+                        if (neighbor.removeFromDomain(field.getValue())) {
+                            queue.add(neighbor);
+                        }
+                    }
+                } else if (hasArcsToFinalizedFields(field)) {
+                    queue.add(field); // Prioritize fields with arcs to finalized fields
+                }
+            }
+        }
+    
+        // Process the queue
+        while (!queue.isEmpty()) {
+            Field field = queue.poll();
+    
+            if (field.getDomainSize() == 0) {
+                return false; // Inconsistency, AC-3 with priority fails
+            }
+    
+            // If the domain has only one value, assign it and propagate constraints
+            if (field.getDomainSize() == 1) {
+                int value = field.getDomain().get(0);
+                field.setValue(value);
+    
+                // Remove the assigned value from neighbors' domains
+                for (Field neighbor : field.getNeighbours()) {
+                    if (neighbor.removeFromDomain(value)) {
+                        queue.add(neighbor);
+                    }
+                }
+                iterations++; // Increment the iteration counter
+            }
+        }
+    
+        System.out.println("Number of iterations (AC-3 with priority): " + iterations); // Print the number of iterations
+    
+        return true; // Sudoku is solvable according to AC-3 with priority
+    }
+
+    // Helper method to check if a field has arcs to finalized fields
+    private boolean hasArcsToFinalizedFields(Field field) {
+        for (Field neighbor : field.getNeighbours()) {
+            if (neighbor.getValue() != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+
+    //Use: solveAC3, solveAC3MRV, solveAC3WithPriority
     public void verifyAC3Output() {
-        if (solveAC3()) {
+        if (solveAC3MRV()) {
             if (validSolution()) {
                 System.out.println("Sudoku is solvable and valid.");
             } else {
