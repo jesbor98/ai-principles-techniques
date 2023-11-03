@@ -91,6 +91,15 @@ public class Field {
     return b;
   }
 
+  public void resetField() {
+    value = 0;
+    domain.clear();
+    for (int i = 1; i <= 9; i++) {
+        domain.add(i);
+    }
+}
+
+
   /*
    * ================
    *  MISC FUNCTIONS
