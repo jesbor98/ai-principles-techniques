@@ -12,13 +12,15 @@ public class App {
     public static void start(String filePath){
         Game game1 = new Game(new Sudoku(filePath));
         game1.showSudoku();
+        game1.verifyAC3Output(); // Verify the output of the AC-3 algorithm
 
-        if (game1.solve() && game1.validSolution()){
+
+        /*if (game1.solve() && game1.validSolution()){
             System.out.println("Solved!");
         }
         else{
             System.out.println("Could not solve this sudoku :(");
-        }
+        }*/
         game1.showSudoku();
     }
 }
