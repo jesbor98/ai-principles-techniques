@@ -139,7 +139,7 @@ public class Game {
             }
     
             // If the domain has only one value, assign it and propagate constraints
-            if (field.getDomainSize() == 1) {
+            if (field.getDomainSize() >= 1) {
                 int value = field.getDomain().get(0);
                 field.setValue(value);
     
