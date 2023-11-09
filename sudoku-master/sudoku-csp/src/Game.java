@@ -134,12 +134,8 @@ public class Game {
         while (!queue.isEmpty()) {
             Field field = queue.poll();
     
-            if (field.getDomainSize() == 0) {
-                return false; // Inconsistency, AC-3 with MRV fails
-            }
-    
             // If the domain has only one value, assign it and propagate constraints
-            if (field.getDomainSize() >= 1) {
+            if (field.getDomainSize() == 1) {
                 int value = field.getDomain().get(0);
                 field.setValue(value);
     
@@ -168,7 +164,14 @@ public class Game {
             }
         }
     
-        fields.sort(Comparator.comparingInt(Field::getDomainSize)); // Sort by domain size in ascending order
+        for(Field field : fields){
+            for(Field neighbor : field.getNeighbours()){
+                field.removeFromDomain(neighbor.getValue());
+            }
+        }
+
+        fields.sort(Comparator.comparingInt(Field::getDomainSize)); // Sort by domain size in ascending order'
+
         return fields;
     }
     
@@ -234,7 +237,7 @@ public class Game {
 
     //Use: solveAC3, solveAC3MRV, solveAC3WithPriority
     public void verifyAC3Output() {
-        if (solveAC3MRV()) {
+        if (solveAC3()) {
             if (validSolution()) {
                 System.out.println("Sudoku is solvable and valid.");
             } else {

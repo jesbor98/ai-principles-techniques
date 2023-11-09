@@ -1,6 +1,6 @@
 public class App {
     public static void main(String[] args) throws Exception {
-        start("sudoku-csp/Sudoku1.txt");
+        start("sudoku-csp/Sudoku3.txt");
         //String filePath = "C:/path/to/your/directory/Sudoku1.txt";
     }
 
