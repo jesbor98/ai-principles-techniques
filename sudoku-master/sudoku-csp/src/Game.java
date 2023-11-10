@@ -32,10 +32,12 @@ public class Game {
             for (int j = 0; j < 9; j++) {
                 int value = board[i][j].getValue();
                 if (value != 0) {
-                    if (rowSet[value - 1]) {
+                    /*if (rowSet[value - 1]) {
                         return false; // Duplicate value in the row
-                    }
+                    }*/
                     rowSet[value - 1] = true;
+                } else{
+                    return false;
                 }
             }
         }
@@ -46,10 +48,12 @@ public class Game {
             for (int i = 0; i < 9; i++) {
                 int value = board[i][j].getValue();
                 if (value != 0) {
-                    if (colSet[value - 1]) {
+                    /*if (colSet[value - 1]) {
                         return false; // Duplicate value in the column
-                    }
+                    }*/
                     colSet[value - 1] = true;
+                } else{
+                    return false;
                 }
             }
         }
@@ -62,10 +66,12 @@ public class Game {
                     for (int j = boxCol; j < boxCol + 3; j++) {
                         int value = board[i][j].getValue();
                         if (value != 0) {
-                            if (boxSet[value - 1]) {
+                            /*if (boxSet[value - 1]) {
                                 return false; // Duplicate value in the 3x3 box
-                            }
+                            }*/
                             boxSet[value - 1] = true;
+                        } else{
+                            return false;
                         }
                     }
                 }
@@ -118,6 +124,7 @@ public class Game {
 
             }
         }
+
         System.out.println("Number of iterations (AC-3): " + iterations); // Print the number of iterations
         return true; // Sudoku is solvable according to AC-3
     }
@@ -133,6 +140,10 @@ public class Game {
         // Process the queue
         while (!queue.isEmpty()) {
             Field field = queue.poll();
+
+            if(field.getDomainSize() == 0){
+                return false; // The sudoku cannot be solved
+            }
     
             // If the domain has only one value, assign it and propagate constraints
             if (field.getDomainSize() == 1) {
@@ -237,13 +248,8 @@ public class Game {
 
     //Use: solveAC3, solveAC3MRV, solveAC3WithPriority
     public void verifyAC3Output() {
-        if (solveAC3()) {
-            if (validSolution()) {
-                System.out.println("Sudoku is solvable and valid.");
-            } else {
-                System.out.println("Sudoku is solvable but not valid.");
-            }
-        
+        if (solveAC3() && validSolution()) {
+            System.out.println("Sudoku is solvable.");
         } else {
             System.out.println("Sudoku is not solvable.");
         }
