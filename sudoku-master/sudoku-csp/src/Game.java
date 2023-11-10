@@ -244,11 +244,76 @@ public class Game {
         }
         return false;
     }
+
+    public boolean solveAC3WithDegree() {
+        int iterations = 0; // Initialize the iteration counter
+        Queue<Field> queue = new LinkedList<>();
+    
+        // Initialize the queue with all fields, but prioritize constraints with arcs to finalized fields
+        for (Field[] row : sudoku.getBoard()) {
+            for (Field field : row) {
+                if (field.getValue() != 0) {
+                    // Remove the assigned value from neighbors' domains
+                    for (Field neighbor : field.getNeighbours()) {
+                        if (neighbor.removeFromDomain(field.getValue())) {
+                            queue.add(neighbor);
+                        }
+                    }
+                } else {
+                    queue.add(field); // Add all fields to the queue initially
+                }
+            }
+        }
+    
+        // Process the queue
+        while (!queue.isEmpty()) {
+            // Sort the queue based on the degree heuristic (number of unassigned neighbors)
+            List<Field> sortedQueue = new ArrayList<>(queue);
+            sortedQueue.sort(Comparator.comparingInt(f -> -countUnassignedNeighbors(f))); // Sort in descending order
+    
+            Field field = sortedQueue.remove(0); // Get the field with the highest degree
+            queue.remove(field);
+    
+            if (field.getDomainSize() == 0) {
+                return false; // Inconsistency, AC-3 with Degree fails
+            }
+    
+            // If the domain has only one value, assign it and propagate constraints
+            if (field.getDomainSize() == 1) {
+                int value = field.getDomain().get(0);
+                field.setValue(value);
+    
+                // Remove the assigned value from neighbors' domains
+                for (Field neighbor : field.getNeighbours()) {
+                    if (neighbor.removeFromDomain(value)) {
+                        queue.add(neighbor);
+                    }
+                }
+                iterations++; // Increment the iteration counter
+            }
+        }
+    
+        System.out.println("Number of iterations (AC-3 with Degree): " + iterations); // Print the number of iterations
+    
+        return true; // Sudoku is solvable according to AC-3 with Degree
+    }
+    
+    // Helper method to count the number of unassigned neighbors for a field
+    private int countUnassignedNeighbors(Field field) {
+        int unassignedNeighbors = 0;
+        for (Field neighbor : field.getNeighbours()) {
+            if (neighbor.getValue() == 0) {
+                unassignedNeighbors++;
+            }
+        }
+        return unassignedNeighbors;
+    }
+    
     
 
     //Use: solveAC3, solveAC3MRV, solveAC3WithPriority
     public void verifyAC3Output() {
-        if (solveAC3() && validSolution()) {
+        if (solveAC3WithPriority() && validSolution()) {
             System.out.println("Sudoku is solvable.");
         } else {
             System.out.println("Sudoku is not solvable.");
