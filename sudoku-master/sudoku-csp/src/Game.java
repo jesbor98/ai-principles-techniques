@@ -163,7 +163,12 @@ public class Game {
         }
 
         System.out.println("Number of iterations (AC-3): " + iterations); // Print the number of iterations
-        return true; // Sudoku is solvable according to AC-3
+
+        if(validSolution()){
+            return true; // Sudoku is solvable according to AC-3
+        } else{
+            return false;
+        }
     }
 
     /**
@@ -204,7 +209,11 @@ public class Game {
 
         System.out.println("Number of iterations (AC-3 with MRV): " + iterations); // Print the number of iterations
 
-        return true; // Sudoku is solvable according to AC-3 with MRV
+        if(validSolution()){
+            return true; // Sudoku is solvable according to AC-3 with MRV
+        } else{
+            return false;
+        }
     }
 
     /**
@@ -231,71 +240,6 @@ public class Game {
         fields.sort(Comparator.comparingInt(Field::getDomainSize)); // Sort by domain size in ascending order'
 
         return fields;
-    }
-
-    /**
-     * Solves the Sudoku puzzle using the AC-3 algorithm with priority on constraints to finalized fields.
-     *
-     * @return true if the puzzle is solvable, false otherwise.
-     */
-    public boolean solveAC3WithPriority() {
-        int iterations = 0; // Initialize the iteration counter
-        Queue<Field> queue = new LinkedList<>();
-
-        // Initialize the queue with all fields, but prioritize constraints with arcs to
-        // finalized fields
-        for (Field[] row : sudoku.getBoard()) {
-            for (Field field : row) {
-                if (field.getValue() != 0) {
-                    // Remove the assigned value from neighbors' domains
-                    for (Field neighbor : field.getNeighbours()) {
-                        if (neighbor.removeFromDomain(field.getValue())) {
-                            queue.add(neighbor);
-                        }
-                    }
-                } else if (hasArcsToFinalizedFields(field)) {
-                    queue.add(field); // Prioritize fields with arcs to finalized fields
-                }
-            }
-        }
-
-        // Process the queue
-        while (!queue.isEmpty()) {
-            Field field = queue.poll();
-
-            if (field.getDomainSize() == 0) {
-                return false; // Inconsistency, AC-3 with priority fails
-            }
-
-            // If the domain has only one value, assign it and propagate constraints
-            if (field.getDomainSize() == 1) {
-                int value = field.getDomain().get(0);
-                field.setValue(value);
-
-                // Remove the assigned value from neighbors' domains
-                for (Field neighbor : field.getNeighbours()) {
-                    if (neighbor.removeFromDomain(value)) {
-                        queue.add(neighbor);
-                    }
-                }
-                iterations++; // Increment the iteration counter
-            }
-        }
-
-        System.out.println("Number of iterations (AC-3 with priority): " + iterations); // Print the number of
-                                                                                        // iterations
-
-        return true; // Sudoku is solvable according to AC-3 with priority
-    }
-
-    // Helper method to check if a field has arcs to finalized fields
-    private boolean hasArcsToFinalizedFields(Field field) {
-        for (Field neighbor : field.getNeighbours()) {
-            if (neighbor.getValue() != 0) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -354,7 +298,11 @@ public class Game {
 
         System.out.println("Number of iterations (AC-3 with Degree): " + iterations); // Print the number of iterations
 
-        return true; // Sudoku is solvable according to AC-3 with Degree
+        if(validSolution()){
+            return true; // Sudoku is solvable according to AC-3 with Degree
+        } else{
+            return false;
+        }
     }
 
     /**
@@ -378,7 +326,7 @@ public class Game {
      */
     // Use: solveAC3, solveAC3MRV, solveAC3WithPriority, solveAC3WithDegree
     public void verifyAC3Output() {
-        if (solveAC3() && validSolution()) {
+        if (solveAC3() /*&& validSolution()*/) {
             System.out.println("Sudoku is solvable.");
         } else {
             System.out.println("Sudoku is not solvable.");
