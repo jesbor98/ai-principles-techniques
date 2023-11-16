@@ -9,7 +9,8 @@ import java.util.Queue;
  */
 public class Game {
     private Sudoku sudoku;
-    private int iterations;
+    private int iterations = 0;
+    private int processedArcs = 0;
 
     /**
      * Constructs a Game object with the given Sudoku instance.
@@ -30,12 +31,33 @@ public class Game {
     }
 
     /**
-     * Retrieves the number of iterations performed during the solving process.
+     * Help-method to increase the number of iterations performed in the algorithms.
      *
      * @return The number of iterations.
      */
-    public int getIterations() {
-        return iterations;
+    public void increaseIterations() {
+        iterations++;
+    }
+
+    /**
+     * Help-method to increase the number of processed arcs performed in the algorithms.
+     *
+     * @return The number of iterations.
+     */
+    public void increaseProcessedArcs() {
+        processedArcs++;
+    }
+
+    /**
+     * Help-method to print the number of iterations and processed arcs for the specified algorithm
+     * 
+     * @param algorithmName
+     * @param iterations
+     * @param processedArcs
+     */
+    public void printNoOfIterationsAndProcessedArcs(String algorithmName,int iterations, int processedArcs){
+        System.out.println("Number of iterations (" + algorithmName + "): " + iterations); // Print the number of iterations
+        System.out.println("Number of processed arcs (" + algorithmName + "): " + processedArcs); // Print the number of added arcs
     }
 
     /**
@@ -113,7 +135,6 @@ public class Game {
      * @return true if the puzzle is solvable, false otherwise.
      */
     public boolean solveAC3() {
-        int iterations = 0; // Initialize the iteration counter
         Queue<Field> queue = new LinkedList<>();
 
         // Initialize the queue with all fields
@@ -134,7 +155,8 @@ public class Game {
         while (!queue.isEmpty()) {
             Field field = queue.poll();
 
-            if (field.getDomainSize() == 0) {
+            if (field.getDomain().isEmpty()) {
+                printNoOfIterationsAndProcessedArcs("AC-3", iterations, processedArcs);
                 return false; // Inconsistency, AC-3 fails
             }
 
@@ -147,28 +169,17 @@ public class Game {
                 for (Field neighbor : field.getNeighbours()) {
                     if (neighbor.removeFromDomain(value)) {
                         queue.add(neighbor);
+                        
                     }
+                    increaseProcessedArcs();
                 }
-                iterations++; // Increment the iteration counter
+                increaseIterations();
             }
         }
 
-        // Check if the puzzle is solved
-        for (Field[] row : sudoku.getBoard()) {
-            for (Field field : row) {
-                if (field.getDomainSize() > 1) {
-                    return false; // Puzzle is not solved
-                }
-            }
-        }
+        printNoOfIterationsAndProcessedArcs("AC-3", iterations, processedArcs);
 
-        System.out.println("Number of iterations (AC-3): " + iterations); // Print the number of iterations
-
-        if(validSolution()){
-            return true; // Sudoku is solvable according to AC-3
-        } else{
-            return false;
-        }
+        return true;
     }
 
     /**
@@ -177,7 +188,6 @@ public class Game {
      * @return true if the puzzle is solvable, false otherwise.
      */
     public boolean solveAC3MRV() {
-        int iterations = 0; // Initialize the iteration counter
         Queue<Field> queue = new LinkedList<>();
 
         // Initialize the queue with fields in a minimum remaining values (MRV) order
@@ -188,7 +198,8 @@ public class Game {
         while (!queue.isEmpty()) {
             Field field = queue.poll();
 
-            if (field.getDomainSize() == 0) {
+            if (field.getDomain().isEmpty()) {
+                printNoOfIterationsAndProcessedArcs("AC-3 with MRV", iterations, processedArcs);
                 return false; // The sudoku cannot be solved
             }
 
@@ -202,18 +213,15 @@ public class Game {
                     if (neighbor.removeFromDomain(value)) {
                         queue.add(neighbor);
                     }
+                    increaseProcessedArcs();
                 }
-                iterations++; // Increment the iteration counter
+                increaseIterations();
             }
         }
 
-        System.out.println("Number of iterations (AC-3 with MRV): " + iterations); // Print the number of iterations
+        printNoOfIterationsAndProcessedArcs("AC-3 with MRV", iterations, processedArcs);
 
-        if(validSolution()){
-            return true; // Sudoku is solvable according to AC-3 with MRV
-        } else{
-            return false;
-        }
+        return true;
     }
 
     /**
@@ -248,7 +256,6 @@ public class Game {
      * @return true if the puzzle is solvable, false otherwise.
      */
     public boolean solveAC3WithDegree() {
-        int iterations = 0; // Initialize the iteration counter
         Queue<Field> queue = new LinkedList<>();
 
         // Initialize the queue with all fields, but prioritize constraints with arcs to
@@ -277,7 +284,8 @@ public class Game {
             Field field = sortedQueue.remove(0); // Get the field with the highest degree
             queue.remove(field);
 
-            if (field.getDomainSize() == 0) {
+            if (field.getDomain().isEmpty()) {
+                printNoOfIterationsAndProcessedArcs("AC-3 with Degree", iterations, processedArcs);
                 return false; // Inconsistency, AC-3 with Degree fails
             }
 
@@ -291,18 +299,15 @@ public class Game {
                     if (neighbor.removeFromDomain(value)) {
                         queue.add(neighbor);
                     }
+                    increaseProcessedArcs();
                 }
-                iterations++; // Increment the iteration counter
+                increaseIterations();
             }
         }
 
-        System.out.println("Number of iterations (AC-3 with Degree): " + iterations); // Print the number of iterations
+        printNoOfIterationsAndProcessedArcs("AC-3 with Degree", iterations, processedArcs);
 
-        if(validSolution()){
-            return true; // Sudoku is solvable according to AC-3 with Degree
-        } else{
-            return false;
-        }
+        return true;
     }
 
     /**
@@ -326,7 +331,7 @@ public class Game {
      */
     // Use: solveAC3, solveAC3MRV, solveAC3WithPriority, solveAC3WithDegree
     public void verifyAC3Output() {
-        if (solveAC3() /*&& validSolution()*/) {
+        if (solveAC3MRV() && validSolution()) {
             System.out.println("Sudoku is solvable.");
         } else {
             System.out.println("Sudoku is not solvable.");
