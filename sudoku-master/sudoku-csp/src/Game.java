@@ -1,3 +1,11 @@
+/*
+ * Artificial Intelligence: Principles & Techniques
+ * Assignment 2: Sudoku
+ * 16/11-23
+ * Amanda Enhörning, s1128126
+ * Jessica Borg, s1129470
+ */
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
