@@ -12,7 +12,7 @@ import java.util.List;
 public class Field {
   private int value = 0;
   private List<Integer> domain;
-  private List<Field> neighbours; //A list of all fields that this field is constrained by
+  private List<Field> neighbours;
 
   /*
    * ==============
@@ -26,14 +26,14 @@ public class Field {
     for (int i = 1; i < 10; i++)
         this.domain.add(i);
 
-    this.neighbours = new ArrayList<>(); // Initialize the neighbors list
+    this.neighbours = new ArrayList<>();
   }
 
   // Constructor in case the field is known, i.e., it contains a value
   Field(int initValue) {
     this.value = initValue;
     this.domain = new ArrayList<>();
-    this.neighbours = new ArrayList<>(); // Initialize the neighbors list
+    this.neighbours = new ArrayList<>();
   }
 
   /*

@@ -78,7 +78,7 @@ public class Sudoku {
     private static void addNeighbours(Field[][] grid) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                grid[i][j].setNeighbours(new ArrayList<>()); // Initialize the neighbors list for the current field
+                grid[i][j].setNeighbours(new ArrayList<>());
 
                 // Add row neighbors
                 for (int k = 0; k < 9; k++) {
@@ -94,7 +94,7 @@ public class Sudoku {
                     }
                 }
 
-                // Add box neighbors
+                // Add 3x3 subgrid neighbors
                 int boxRow = i / 3 * 3;
                 int boxCol = j / 3 * 3;
                 for (int x = boxRow; x < boxRow + 3; x++) {

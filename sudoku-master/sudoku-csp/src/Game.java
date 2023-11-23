@@ -64,8 +64,8 @@ public class Game {
      * @param processedArcs
      */
     public void printNoOfIterationsAndProcessedArcs(String algorithmName,int iterations, int processedArcs){
-        System.out.println("Number of iterations (" + algorithmName + "): " + iterations); // Print the number of iterations
-        System.out.println("Number of processed arcs (" + algorithmName + "): " + processedArcs); // Print the number of added arcs
+        System.out.println("Number of iterations (" + algorithmName + "): " + iterations);
+        System.out.println("Number of processed arcs (" + algorithmName + "): " + processedArcs);
     }
 
     /**
@@ -82,11 +82,6 @@ public class Game {
             for (int j = 0; j < 9; j++) {
                 int value = board[i][j].getValue();
                 if (value != 0) {
-                    /*
-                     * if (rowSet[value - 1]) {
-                     * return false; // Duplicate value in the row
-                     * }
-                     */
                     rowSet[value - 1] = true;
                 } else {
                     return false;
@@ -100,11 +95,6 @@ public class Game {
             for (int i = 0; i < 9; i++) {
                 int value = board[i][j].getValue();
                 if (value != 0) {
-                    /*
-                     * if (colSet[value - 1]) {
-                     * return false; // Duplicate value in the column
-                     * }
-                     */
                     colSet[value - 1] = true;
                 } else {
                     return false;
@@ -112,7 +102,7 @@ public class Game {
             }
         }
 
-        // Check 3x3 boxes
+        // Check 3x3 subgrid
         for (int boxRow = 0; boxRow < 9; boxRow += 3) {
             for (int boxCol = 0; boxCol < 9; boxCol += 3) {
                 boolean[] boxSet = new boolean[9];
@@ -120,11 +110,6 @@ public class Game {
                     for (int j = boxCol; j < boxCol + 3; j++) {
                         int value = board[i][j].getValue();
                         if (value != 0) {
-                            /*
-                             * if (boxSet[value - 1]) {
-                             * return false; // Duplicate value in the 3x3 box
-                             * }
-                             */
                             boxSet[value - 1] = true;
                         } else {
                             return false;
@@ -145,11 +130,9 @@ public class Game {
     public boolean solveAC3() {
         Queue<Field> queue = new LinkedList<>();
 
-        // Initialize the queue with all fields
         for (Field[] row : sudoku.getBoard()) {
             for (Field field : row) {
                 if (field.getValue() != 0) {
-                    // Remove the assigned value from neighbors' domains
                     for (Field neighbor : field.getNeighbours()) {
                         if (neighbor.removeFromDomain(field.getValue())) {
                             queue.add(neighbor);
@@ -159,7 +142,6 @@ public class Game {
             }
         }
 
-        // Process the queue
         while (!queue.isEmpty()) {
             Field field = queue.poll();
 
@@ -168,12 +150,10 @@ public class Game {
                 return false; // Inconsistency, AC-3 fails
             }
 
-            // If the domain has only one value, assign it and propagate constraints
             if (field.getDomainSize() == 1) {
                 int value = field.getDomain().get(0);
                 field.setValue(value);
 
-                // Remove the assigned value from neighbors' domains
                 for (Field neighbor : field.getNeighbours()) {
                     if (neighbor.removeFromDomain(value)) {
                         queue.add(neighbor);
@@ -198,25 +178,22 @@ public class Game {
     public boolean solveAC3MRV() {
         Queue<Field> queue = new LinkedList<>();
 
-        // Initialize the queue with fields in a minimum remaining values (MRV) order
-        List<Field> fields = getFieldsInMRVOrder(); // Implement your MRV heuristic
+        // Initialize the queue with fields in a MRV order
+        List<Field> fields = getFieldsInMRVOrder();
         queue.addAll(fields);
 
-        // Process the queue
         while (!queue.isEmpty()) {
             Field field = queue.poll();
 
             if (field.getDomain().isEmpty()) {
                 printNoOfIterationsAndProcessedArcs("AC-3 with MRV", iterations, processedArcs);
-                return false; // The sudoku cannot be solved
+                return false;
             }
 
-            // If the domain has only one value, assign it and propagate constraints
             if (field.getDomainSize() == 1) {
                 int value = field.getDomain().get(0);
                 field.setValue(value);
 
-                // Remove the assigned value from neighbors' domains
                 for (Field neighbor : field.getNeighbours()) {
                     if (neighbor.removeFromDomain(value)) {
                         queue.add(neighbor);
@@ -253,7 +230,7 @@ public class Game {
             }
         }
 
-        fields.sort(Comparator.comparingInt(Field::getDomainSize)); // Sort by domain size in ascending order'
+        fields.sort(Comparator.comparingInt(Field::getDomainSize)); // Sort by domain size in ascending order
 
         return fields;
     }
@@ -266,24 +243,20 @@ public class Game {
     public boolean solveAC3WithDegree() {
         Queue<Field> queue = new LinkedList<>();
 
-        // Initialize the queue with all fields, but prioritize constraints with arcs to
-        // finalized fields
         for (Field[] row : sudoku.getBoard()) {
             for (Field field : row) {
                 if (field.getValue() != 0) {
-                    // Remove the assigned value from neighbors' domains
                     for (Field neighbor : field.getNeighbours()) {
                         if (neighbor.removeFromDomain(field.getValue())) {
                             queue.add(neighbor);
                         }
                     }
                 } else {
-                    queue.add(field); // Add all fields to the queue initially
+                    queue.add(field);
                 }
             }
         }
 
-        // Process the queue
         while (!queue.isEmpty()) {
             // Sort the queue based on the degree heuristic (number of unassigned neighbors)
             List<Field> sortedQueue = new ArrayList<>(queue);
@@ -294,15 +267,13 @@ public class Game {
 
             if (field.getDomain().isEmpty()) {
                 printNoOfIterationsAndProcessedArcs("AC-3 with Degree", iterations, processedArcs);
-                return false; // Inconsistency, AC-3 with Degree fails
+                return false;
             }
 
-            // If the domain has only one value, assign it and propagate constraints
             if (field.getDomainSize() == 1) {
                 int value = field.getDomain().get(0);
                 field.setValue(value);
 
-                // Remove the assigned value from neighbors' domains
                 for (Field neighbor : field.getNeighbours()) {
                     if (neighbor.removeFromDomain(value)) {
                         queue.add(neighbor);
@@ -335,9 +306,9 @@ public class Game {
     }
 
     /**
-     * Verifies the output of the AC-3 algorithm and prints whether the Sudoku puzzle is solvable or not.
+     * Verifies the output of the AC-3 algorithm with or without heuristics and prints whether the Sudoku puzzle is solvable or not.
+     * Use one of the following methods: solveACr(), solveAC3MRV(), solveAC3WithDegree
      */
-    // Use: solveAC3, solveAC3MRV, solveAC3WithPriority, solveAC3WithDegree
     public void verifyAC3Output() {
         if (solveAC3MRV() && validSolution()) {
             System.out.println("Sudoku is solvable.");

@@ -19,7 +19,7 @@ public class App {
     public static void start(String filePath){
         Game game1 = new Game(new Sudoku(filePath));
         game1.showSudoku();
-        game1.verifyAC3Output(); // Verify the output of the AC-3 algorithm
+        game1.verifyAC3Output();
         game1.showSudoku();
     }
 }
