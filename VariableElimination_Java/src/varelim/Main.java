@@ -44,5 +44,8 @@ public class Main {
 		
 		//PUT YOUR CALL TO THE VARIABLE ELIMINATION ALGORITHM HERE
 		
+        // Call the variableElimination method
+		VariableElimination.variableElimination(ui, variables);
+
 	}
 }
