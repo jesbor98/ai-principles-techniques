@@ -43,13 +43,13 @@ public class VariableElimination {
 
         // Multiply the remaining factors to get the final result
         Factor resultFactor = multiplyFactors(factors);
-
         // Display the final result
         System.out.println("Probability distribution for " + query.getName() + ":");
         for (Map.Entry<Condition, Double> entry : resultFactor.getValues().entrySet()) {
             System.out.println(entry.getKey() + " => " + entry.getValue());
         }
     }
+
 
     private static List<Variable> getEliminationOrder(ArrayList<Variable> variables, Variable query, ArrayList<ObsVar> observed) {
         // Implement your elimination order logic here
@@ -86,10 +86,21 @@ public class VariableElimination {
         // Implement logic to multiply a list of factors
         // This method should return a single factor resulting from the multiplication
         // For now, a simple multiplication is performed by combining their values
-        Factor resultFactor = new Factor(factors.get(0).getVariables());
-        for (Factor factor : factors) {
-            resultFactor.multiplyValues(factor.getValues());
-        }
-        return resultFactor;
+        List<Variable> allVariables = null;  // Declare the list outside the loop
+
+            for (Factor factor : factors) {
+                if(allVariables == null) {
+                    allVariables = new ArrayList<>();
+                }
+                allVariables.addAll(factor.getVariables());
+            }
+            Factor resultFactor = new Factor(allVariables);
+
+            // Multiply values for all factors
+            for (Factor factor : factors) {
+                resultFactor.multiplyValues(factor.getValues());
+            }
+            return resultFactor;
+        
     }
 }

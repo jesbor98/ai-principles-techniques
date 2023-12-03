@@ -53,13 +53,16 @@ public class Factor {
     }
 
     public void multiplyValues(Map<Condition, Double> otherValues) {
-        // Multiply values with another set of values
-        for (Map.Entry<Condition, Double> entry : values.entrySet()) {
-            Condition condition = entry.getKey();
-            double value = entry.getValue();
-            Double otherValue = otherValues.get(condition);
-            if (otherValue != null) {
-                values.put(condition, value * otherValue);
+        if(values.isEmpty()) {
+            values.putAll(otherValues);
+        } else {
+            for (Map.Entry<Condition, Double> entry : values.entrySet()) {
+                Condition condition = entry.getKey();
+                double value = entry.getValue();
+                Double otherValue = otherValues.get(condition);
+                if (otherValue != null) {
+                    values.put(condition, value * otherValue);
+                }
             }
         }
     }
@@ -149,4 +152,14 @@ public class Factor {
         }
         values.putAll(newValues);
     }
+
+    @Override
+        public String toString() {
+            return "Factor{" +
+                    "variables=" + variables +
+                    ", values=" + values +
+                    '}';
+        }
+
+
 }
