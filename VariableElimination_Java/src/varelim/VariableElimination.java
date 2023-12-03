@@ -98,7 +98,7 @@ public class VariableElimination {
 
             // Multiply values for all factors
             for (Factor factor : factors) {
-                resultFactor.multiplyValues(factor.getValues());
+                resultFactor.product(factor.getValues());
             }
             return resultFactor;
         

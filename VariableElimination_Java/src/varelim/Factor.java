@@ -52,7 +52,7 @@ public class Factor {
         this.values = values;
     }
 
-    public void multiplyValues(Map<Condition, Double> otherValues) {
+    public void product(Map<Condition, Double> otherValues) {
         if(values.isEmpty()) {
             values.putAll(otherValues);
         } else {
@@ -92,32 +92,6 @@ public class Factor {
         }
 
         this.variables = updatedVariables;
-    }
-
-    /**
-     * Perform product operation with another factor.
-     * 
-     * @param otherFactor Factor to perform product with.
-     * @return Resulting factor after the product operation.
-     */
-    public Factor product(Factor otherFactor) {
-        List<Variable> combinedVariables = new ArrayList<>(variables);
-        combinedVariables.addAll(otherFactor.variables);
-
-        Factor resultFactor = new Factor(combinedVariables);
-
-        for (Condition condition1 : values.keySet()) {
-            for (Condition condition2 : otherFactor.values.keySet()) {
-                if (condition1.contains(condition2)) {
-                    double productValue = values.get(condition1) * otherFactor.values.get(condition2);
-                    Condition combinedCondition = new Condition(condition1.getObserved());
-                    combinedCondition.getObserved().addAll(condition2.getObserved());
-                    resultFactor.values.put(combinedCondition, productValue);
-                }
-            }
-        }
-
-        return resultFactor;
     }
 
     /**
