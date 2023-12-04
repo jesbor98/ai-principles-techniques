@@ -101,6 +101,14 @@ public class Variable {
 	public ArrayList<Variable> getParents() {
 		return parents;
 	}
+
+	/**
+	 * Getter of the parents of the variable.
+	 * @return the list of parents as an ArrayList of Variables.
+	 */
+	public int getNumberOfParents() {
+		return parents.size();
+	}
 	
 	/**
 	 * Setter of the parents of the variable.

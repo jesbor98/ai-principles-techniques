@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @author Pepe Tiebosch
  */
 public class Main {
-	private final static String networkName = "survey.bif"; // The network to be read in (format and other networks can be found on http://www.bnlearn.com/bnrepository/)
+	private final static String networkName = "earthquake.bif"; // The network to be read in (format and other networks can be found on http://www.bnlearn.com/bnrepository/)
 
 	public static void main(String[] args) {
 		
@@ -36,8 +36,8 @@ public class Main {
 		// ArrayList<ObsVar> observed = ui.getObservedVariables(); 
 		
 		// Turn this on if you want to experiment with different heuristics for bonus points (you need to implement the heuristics yourself)
-		// ui.askForHeuristic();
-		// String heuristic = ui.getHeuristic();
+		ui.askForHeuristic();
+		String heuristic = ui.getHeuristic();
 		
 		// Print the query and observed variables
 		ui.printQueryAndObserved();
@@ -45,7 +45,7 @@ public class Main {
 		//PUT YOUR CALL TO THE VARIABLE ELIMINATION ALGORITHM HERE
 		
         // Call the variableElimination method
-		VariableElimination.variableElimination(ui, variables);
+		VariableElimination.variableElimination(ui, variables, heuristic);
 
 	}
 }

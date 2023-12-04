@@ -2,12 +2,16 @@ package varelim;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 public class VariableElimination {
     
-    public static void variableElimination(UserInterface ui, ArrayList<Variable> variables) {
+    
+    public static void variableElimination(UserInterface ui, ArrayList<Variable> variables, String heuristic) {
+        int counter = 0;
+
         // Get the query and observed variables from the user interface
         Variable query = ui.getQueriedVariable();
         ArrayList<ObsVar> observed = ui.getObservedVariables();
@@ -25,12 +29,13 @@ public class VariableElimination {
             for (Factor factor : factors) {
                 if (factor.getVariables().contains(observedVar.getVar())) {
                     factor.reduce(observedVar.getVar(), observedVar.getValue());
+                    counter++;
                 }
             }
         }
 
         // Perform variable elimination
-        List<Variable> eliminationOrder = getEliminationOrder(variables, query, observed);
+        List<Variable> eliminationOrder = getEliminationOrder(variables, query, observed, heuristic);
         for (Variable variable : eliminationOrder) {
             List<Factor> relevantFactors = getRelevantFactors(variable, factors);
             Factor productFactor = multiplyFactors(relevantFactors);
@@ -39,7 +44,9 @@ public class VariableElimination {
             // Remove the old factors and add the new one
             factors.removeAll(relevantFactors);
             factors.add(productFactor);
+            counter++;
         }
+        //Number of operations: 5,Number of operations: 5
 
         // Multiply the remaining factors to get the final result
         Factor resultFactor = multiplyFactors(factors);
@@ -48,10 +55,12 @@ public class VariableElimination {
         for (Map.Entry<Condition, Double> entry : resultFactor.getValues().entrySet()) {
             System.out.println(entry.getKey() + " => " + entry.getValue());
         }
+
+        System.out.println("Number of operations: " + counter);
     }
 
 
-    private static List<Variable> getEliminationOrder(ArrayList<Variable> variables, Variable query, ArrayList<ObsVar> observed) {
+    private static List<Variable> getEliminationOrder(ArrayList<Variable> variables, Variable query, ArrayList<ObsVar> observed, String heuristic) {
         // Implement your elimination order logic here
         // This method should return a list of variables in the order they should be eliminated
         // You can use heuristics or other strategies to determine the elimination order
@@ -65,6 +74,35 @@ public class VariableElimination {
         }
 
         eliminationOrder.removeAll(observedVariables);
+
+        switch (heuristic) {
+        case "least-incoming":
+        System.out.println("Before sorting (least-incoming): " + eliminationOrder);
+        eliminationOrder.sort(new Comparator<Variable>() {
+            @Override
+            public int compare(Variable v1, Variable v2) {
+                return Integer.compare(v1.getNrOfParents(), v2.getNrOfParents());
+            }
+        });  
+        System.out.println("Before sorting (least-incoming): " + eliminationOrder);      
+        break;
+        case "fewest-factors":
+        System.out.println("Before sorting (fewest-factors): " + eliminationOrder);
+        eliminationOrder.sort(new Comparator<Variable>() {
+            @Override
+            public int compare(Variable v1, Variable v2) {
+                return Integer.compare(v1.getNumberOfParents(), v2.getNumberOfParents());
+            }
+        });
+        System.out.println("After sorting (fewest-factors): " + eliminationOrder);
+            break;
+        // Add cases for other heuristics as needed
+        default:
+        System.out.println("Default sorting (no heurstic): " + eliminationOrder); 
+            // For empty heuristic or unknown, keep the default order
+            break;
+    }
+        
 
         return eliminationOrder;
     }
@@ -103,4 +141,6 @@ public class VariableElimination {
             return resultFactor;
         
     }
+
+    
 }
