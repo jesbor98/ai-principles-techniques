@@ -84,14 +84,15 @@ public class VariableElimination {
                 return Integer.compare(v1.getNrOfParents(), v2.getNrOfParents());
             }
         });  
-        System.out.println("Before sorting (least-incoming): " + eliminationOrder);      
+        System.out.println("After sorting (least-incoming): " + eliminationOrder);      
         break;
         case "fewest-factors":
         System.out.println("Before sorting (fewest-factors): " + eliminationOrder);
         eliminationOrder.sort(new Comparator<Variable>() {
+
             @Override
             public int compare(Variable v1, Variable v2) {
-                return Integer.compare(v1.getNumberOfParents(), v2.getNumberOfParents());
+                return Integer.compare(v1.getNumberOfValues(), v2.getNumberOfValues());
             }
         });
         System.out.println("After sorting (fewest-factors): " + eliminationOrder);
@@ -102,7 +103,6 @@ public class VariableElimination {
             // For empty heuristic or unknown, keep the default order
             break;
     }
-        
 
         return eliminationOrder;
     }
