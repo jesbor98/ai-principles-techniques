@@ -2,6 +2,7 @@ package varelim;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -128,4 +129,14 @@ public class Variable {
 			return parents.size();
 		return 0;
 	}
+
+	public int getNrOfChildren(List<Variable> allVariables) {
+		int numberOfChildren = 0;
+		for (Variable otherVariable : allVariables) {
+				if (otherVariable.parents.contains(this)) {
+						numberOfChildren++;
+				}
+		}
+		return numberOfChildren;
+}
 }

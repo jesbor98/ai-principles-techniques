@@ -61,14 +61,14 @@ public class VariableElimination {
     }
 
 
-    private static List<Variable> getEliminationOrder(ArrayList<Variable> variables, Variable query,
+    private static List<Variable> getEliminationOrder(final ArrayList<Variable> variables, Variable query,
             ArrayList<ObsVar> observed, String heuristic, final List<Factor> factors) {
         // Implement your elimination order logic here
         // This method should return a list of variables in the order they should be
         // eliminated
         // You can use heuristics or other strategies to determine the elimination order
         // For now, a simple order based on the variable index is used as an example
-        List<Variable> eliminationOrder = new ArrayList<>(variables);
+        final List<Variable> eliminationOrder = new ArrayList<>(variables);
         eliminationOrder.remove(query);
         List<Variable> observedVariables = new ArrayList<>();
 
@@ -83,7 +83,7 @@ public class VariableElimination {
                 System.out.println("Before sorting (least-incoming): " + eliminationOrder);
                 eliminationOrder.sort(new Comparator<Variable>() {
                     @Override
-                    public int compare(Variable v1, Variable v2) {
+                    public int compare(final Variable v1, final Variable v2) {
                         int parentsV1 = v1.getNrOfParents();
                         int parentsV2 = v2.getNrOfParents();
                         System.out.println(v1.getName() + " parents: " + parentsV1);
@@ -95,15 +95,17 @@ public class VariableElimination {
                 break;
 
             case "fewest-factors":
-            System.out.println("All factors: " + factors);
+                System.out.println("All factors: " + factors);
                 System.out.println("Before sorting (fewest-factors): " + eliminationOrder);
                 eliminationOrder.sort(new Comparator<Variable>() {
                     @Override
-                    public int compare(Variable v1, Variable v2) {
-                        int factorsV1 = getRelevantFactors(v1, factors).size();
-                        int factorsV2 = getRelevantFactors(v2, factors).size();
-                        System.out.println(v1.getName() + " factors: " + factorsV1);
-                        System.out.println(v2.getName() + " factors: " + factorsV2);
+                    public int compare(final Variable v1, final Variable v2) {
+                        int factorsV1 = v1.getParents().size()
+                                + v1.getNrOfChildren(eliminationOrder);
+                        int factorsV2 = v2.getParents().size()
+                                + v2.getNrOfChildren(eliminationOrder);
+                        //System.out.println(v1.getName() + " factors: " + factorsV1);
+                        //System.out.println(v2.getName() + " factors: " + factorsV2);
                         return Integer.compare(factorsV1, factorsV2);
                     }
                 });
