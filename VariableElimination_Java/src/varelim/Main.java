@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @author Pepe Tiebosch
  */
 public class Main {
-	private final static String networkName = "earthquake.bif"; // The network to be read in (format and other networks can be found on http://www.bnlearn.com/bnrepository/)
+	private final static String networkName = "survey.bif"; // The network to be read in (format and other networks can be found on http://www.bnlearn.com/bnrepository/)
 
 	public static void main(String[] args) {
 		

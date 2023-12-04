@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class VariableElimination {
+    private static final List<Factor> factors = new ArrayList<>();
     
     
     public static void variableElimination(UserInterface ui, ArrayList<Variable> variables, String heuristic) {
@@ -17,7 +18,7 @@ public class VariableElimination {
         ArrayList<ObsVar> observed = ui.getObservedVariables();
 
         // Initialize factors with the probabilities of each variable
-        List<Factor> factors = new ArrayList<>();
+        
         for (Variable variable : variables) {
             Factor factor = new Factor(Arrays.asList(variable));
             factor.setValues(variable.getProbabilities());
@@ -35,7 +36,7 @@ public class VariableElimination {
         }
 
         // Perform variable elimination
-        List<Variable> eliminationOrder = getEliminationOrder(variables, query, observed, heuristic);
+        List<Variable> eliminationOrder = getEliminationOrder(variables, query, observed, heuristic, factors);
         for (Variable variable : eliminationOrder) {
             List<Factor> relevantFactors = getRelevantFactors(variable, factors);
             Factor productFactor = multiplyFactors(relevantFactors);
@@ -60,9 +61,11 @@ public class VariableElimination {
     }
 
 
-    private static List<Variable> getEliminationOrder(ArrayList<Variable> variables, Variable query, ArrayList<ObsVar> observed, String heuristic) {
+    private static List<Variable> getEliminationOrder(ArrayList<Variable> variables, Variable query,
+            ArrayList<ObsVar> observed, String heuristic, final List<Factor> factors) {
         // Implement your elimination order logic here
-        // This method should return a list of variables in the order they should be eliminated
+        // This method should return a list of variables in the order they should be
+        // eliminated
         // You can use heuristics or other strategies to determine the elimination order
         // For now, a simple order based on the variable index is used as an example
         List<Variable> eliminationOrder = new ArrayList<>(variables);
@@ -76,36 +79,46 @@ public class VariableElimination {
         eliminationOrder.removeAll(observedVariables);
 
         switch (heuristic) {
-        case "least-incoming":
-        System.out.println("Before sorting (least-incoming): " + eliminationOrder);
-        eliminationOrder.sort(new Comparator<Variable>() {
-            @Override
-            public int compare(Variable v1, Variable v2) {
-                return Integer.compare(v1.getNrOfParents(), v2.getNrOfParents());
-            }
-        });  
-        System.out.println("After sorting (least-incoming): " + eliminationOrder);      
-        break;
-        case "fewest-factors":
-        System.out.println("Before sorting (fewest-factors): " + eliminationOrder);
-        eliminationOrder.sort(new Comparator<Variable>() {
+            case "least-incoming":
+                System.out.println("Before sorting (least-incoming): " + eliminationOrder);
+                eliminationOrder.sort(new Comparator<Variable>() {
+                    @Override
+                    public int compare(Variable v1, Variable v2) {
+                        int parentsV1 = v1.getNrOfParents();
+                        int parentsV2 = v2.getNrOfParents();
+                        System.out.println(v1.getName() + " parents: " + parentsV1);
+                        System.out.println(v2.getName() + " parents: " + parentsV2);
+                        return Integer.compare(parentsV1, parentsV2);
+                    }
+                });
+                System.out.println("After sorting (least-incoming): " + eliminationOrder);
+                break;
 
-            @Override
-            public int compare(Variable v1, Variable v2) {
-                return Integer.compare(v1.getNumberOfValues(), v2.getNumberOfValues());
-            }
-        });
-        System.out.println("After sorting (fewest-factors): " + eliminationOrder);
-            break;
-        // Add cases for other heuristics as needed
-        default:
-        System.out.println("Default sorting (no heurstic): " + eliminationOrder); 
-            // For empty heuristic or unknown, keep the default order
-            break;
-    }
+            case "fewest-factors":
+            System.out.println("All factors: " + factors);
+                System.out.println("Before sorting (fewest-factors): " + eliminationOrder);
+                eliminationOrder.sort(new Comparator<Variable>() {
+                    @Override
+                    public int compare(Variable v1, Variable v2) {
+                        int factorsV1 = getRelevantFactors(v1, factors).size();
+                        int factorsV2 = getRelevantFactors(v2, factors).size();
+                        System.out.println(v1.getName() + " factors: " + factorsV1);
+                        System.out.println(v2.getName() + " factors: " + factorsV2);
+                        return Integer.compare(factorsV1, factorsV2);
+                    }
+                });
+                System.out.println("After sorting (fewest-factors): " + eliminationOrder);
+                break;
+            // Add cases for other heuristics as needed
+            default:
+                System.out.println("Default sorting (no heurstic): " + eliminationOrder);
+                // For empty heuristic or unknown, keep the default order
+                break;
+        }
 
         return eliminationOrder;
     }
+
 
     private static List<Factor> getRelevantFactors(Variable variable, List<Factor> factors) {
         // Implement logic to get relevant factors for elimination of a variable
