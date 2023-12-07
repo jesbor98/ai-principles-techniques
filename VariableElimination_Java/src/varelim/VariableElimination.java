@@ -11,7 +11,7 @@ public class VariableElimination {
     
     
     public static void variableElimination(UserInterface ui, ArrayList<Variable> variables, String heuristic) {
-        int counter = 0;
+        int totalCounter = 0;
 
         // Get the query and observed variables from the user interface
         Variable query = ui.getQueriedVariable();
@@ -30,7 +30,8 @@ public class VariableElimination {
             for (Factor factor : factors) {
                 if (factor.getVariables().contains(observedVar.getVar())) {
                     factor.reduce(observedVar.getVar(), observedVar.getValue());
-                    counter++;
+                    totalCounter++;
+                    System.out.println("Counter inside 1st loop: " + totalCounter);
                 }
             }
         }
@@ -45,9 +46,9 @@ public class VariableElimination {
             // Remove the old factors and add the new one
             factors.removeAll(relevantFactors);
             factors.add(productFactor);
-            counter++;
+            totalCounter++;
+            System.out.println("Counter inside 2nd loop: " + totalCounter);
         }
-        //Number of operations: 5,Number of operations: 5
 
         // Multiply the remaining factors to get the final result
         Factor resultFactor = multiplyFactors(factors);
@@ -57,9 +58,13 @@ public class VariableElimination {
             System.out.println(entry.getKey() + " => " + entry.getValue());
         }
 
-        System.out.println("Number of operations: " + counter);
+        for(Factor factor: factors) {
+            totalCounter += factor.getCounter();
+        }
+        System.out.println("Total number of operations for factors: " + totalCounter);
     }
 
+   
 
     private static List<Variable> getEliminationOrder(final ArrayList<Variable> variables, Variable query,
             ArrayList<ObsVar> observed, String heuristic, final List<Factor> factors) {
@@ -104,8 +109,8 @@ public class VariableElimination {
                                 + v1.getNrOfChildren(eliminationOrder);
                         int factorsV2 = v2.getParents().size()
                                 + v2.getNrOfChildren(eliminationOrder);
-                        //System.out.println(v1.getName() + " factors: " + factorsV1);
-                        //System.out.println(v2.getName() + " factors: " + factorsV2);
+                        System.out.println(v1.getName() + " factors: " + factorsV1);
+                        System.out.println(v2.getName() + " factors: " + factorsV2);
                         return Integer.compare(factorsV1, factorsV2);
                     }
                 });
@@ -154,7 +159,6 @@ public class VariableElimination {
                 resultFactor.product(factor.getValues());
             }
             return resultFactor;
-        
     }
 
     

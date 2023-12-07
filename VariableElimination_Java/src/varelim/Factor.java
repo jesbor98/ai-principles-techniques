@@ -14,6 +14,7 @@ public class Factor {
 
     private List<Variable> variables;
     private Map<Condition, Double> values;
+    private int counter = 0;
 
     /**
      * Constructor for the factor class.
@@ -53,6 +54,7 @@ public class Factor {
     }
 
     public void product(Map<Condition, Double> otherValues) {
+         increaseCounter();
         if(values.isEmpty()) {
             values.putAll(otherValues);
         } else {
@@ -74,6 +76,7 @@ public class Factor {
      * @param value    Value to which the variable is fixed.
      */
     public void reduce(Variable variable, String value) {
+         increaseCounter();
         List<Variable> updatedVariables = new ArrayList<>(variables);
         updatedVariables.remove(variable);
         List<Condition> conditionsToRemove = new ArrayList<>();
@@ -100,6 +103,7 @@ public class Factor {
      * @param variable Variable to be marginalized.
      */
     public void marginalize(Variable variable) {
+         increaseCounter();
         // Marginalize the factor by summing over a variable
         List<Condition> conditionsToRemove = new ArrayList<>();
         Map<Condition, Double> newValues = new HashMap<>();
@@ -125,6 +129,14 @@ public class Factor {
             values.remove(conditionToRemove);
         }
         values.putAll(newValues);
+    }
+
+    public void increaseCounter() {
+        counter++;
+    }
+
+    public int getCounter() {
+        return counter;
     }
 
     @Override
