@@ -28,10 +28,10 @@ if __name__ == '__main__':
     ve = VariableElimination(net)
 
     # Set the node to be queried as follows:
-    query = 'Alarm'
+    query = 'JohnCalls'
 
     # The evidence is represented in the following way (can also be empty when there is no evidence): 
-    evidence = {'Burglary': 'True'}
+    evidence = {'Burglary': 'True', 'Earthquake': 'True'}
 
     # Determine your elimination ordering before you call the run function. The elimination ordering   
     # is either specified by a list or a heuristic function that determines the elimination ordering
@@ -44,24 +44,6 @@ if __name__ == '__main__':
     elim_order_contained_in_fewest_factors_first = VariableElimination.contained_in_fewest_factors_first
 
     # Call the variable elimination function for the queried node given the evidence and the elimination ordering as follows:
-    #ve.run(query, evidence, elim_order)
-    #ve.run(query, evidence, elim_order_least_incoming_arcs_first)
-    #ve.run(query, evidence, elim_order_contained_in_fewest_factors_first)
-    
-    # Measure time for the first run without heuristics
-    start_time = time.time()
-    ve.run(query, evidence, elim_order)
-    end_time = time.time()
-    print(f"Time taken without heuristics: {round(end_time - start_time, 4)} seconds")
-
-    # Measure time for the second run with the first heuristic
-    start_time = time.time()
-    ve.run(query, evidence, elim_order_least_incoming_arcs_first)
-    end_time = time.time()
-    print(f"Time taken with least_incoming_arcs_first heuristic: {round(end_time - start_time, 4)} seconds")
-
-    # Measure time for the third run with the second heuristic
-    start_time = time.time()
-    ve.run(query, evidence, elim_order_contained_in_fewest_factors_first)
-    end_time = time.time()
-    print(f"Time taken with contained_in_fewest_factors_first heuristic: {round(end_time - start_time, 4)} seconds")
+    ve.run(query, evidence, elim_order, 'No heuristic')
+    ve.run(query, evidence, elim_order_least_incoming_arcs_first, 'Least incoming arcs first')
+    ve.run(query, evidence, elim_order_contained_in_fewest_factors_first, 'Contained in fewest factors first')

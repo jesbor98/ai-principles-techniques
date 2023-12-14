@@ -10,6 +10,7 @@ class VariableElimination:
         """
         self.network = network
         self.log_file = "variable_elimination_log.txt"  # Log file path
+        self.counter = 0
         
         # Remove existing log file if exists
         if os.path.exists(self.log_file):
@@ -21,8 +22,14 @@ class VariableElimination:
         """
         with open(self.log_file, "a") as log:
             log.write(message + "\n")
+            
+    def reset_counter(self):
+        """
+        Reset the counter to zero.
+        """
+        self.counter = 0
 
-    def run(self, query, observed, elim_order):
+    def run(self, query, observed, elim_order, heuristic):
         """
         Use the variable elimination algorithm to find out the probability
         distribution of the query variable given the observed variables
@@ -37,46 +44,38 @@ class VariableElimination:
         Output: A variable holding the probability distribution
                 for the query variable
         """
-        # Check if elim_order is a function (heuristic)
+        # Check for heuristic
         elim_order = elim_order(self.network) if callable(elim_order) else elim_order
         
         # Logging elimination ordering
-        self.log_to_file(f"\nElimination Order: {elim_order}")
+        self.log_to_file(f"\nHeuristic used: {heuristic}\nElimination Order: {elim_order}")
         
-        # Copy all probability distributions from the network
         factors = [prob.copy() for prob in self.network.probabilities.values()]
 
-        # Eliminate variables in the specified order
         for elim_node in elim_order:
             # Logging current elimination node
             self.log_to_file(f"\nProcessing Elimination Node: {elim_node}")
             
-            # Check which factors contain the current elimination node
             factors_contain_node, indices = self.contains_node(factors, elim_node)
             
             # Logging factors containing elimination node
             self.log_to_file(f"Factors Containing {elim_node}: {indices}")
             
-            # Multiply the factors that have the elimination node
             computed_factor = self.product(factors_contain_node, elim_node) if len(factors_contain_node) >= 2 else factors_contain_node[0]
 
-            # If the elimination node is observed, reduce the factor accordingly
             if factors_contain_node:
                 if elim_node in observed:
                     computed_factor = self.reduction(observed[elim_node], elim_node, computed_factor)
                     # Logging reduction
                     self.log_to_file(f"Reduction for Observed Node {elim_node}: {observed[elim_node]}")
                 
-                # If the elimination node is not the query node, marginalize it
                 elif elim_node != query:
                     computed_factor = self.marginalize(elim_node, computed_factor) if len(factors_contain_node) >= 2 else self.marginalize(elim_node, factors_contain_node[0])
                     # Logging marginalization
                     self.log_to_file(f"Marginalization for Node {elim_node}")
 
-                # Remove the factors used in the computation
                 indices.reverse()
                 factors = [factors[i] for i in range(len(factors)) if i not in indices]
-                # Append the computed factor
                 factors.append(computed_factor)
                 
 
@@ -95,8 +94,9 @@ class VariableElimination:
         dict_data = {query: states, "prob": results}
         result = pd.DataFrame(data=dict_data)
         print(f"Final result: \n{result}")
+        print(f"Total number of operations: {self.counter}")
+        self.reset_counter()
         
-        # Logging final result
         self.log_to_file(f"\nFinal Result: \n{result}")
         
         return result
@@ -147,6 +147,7 @@ class VariableElimination:
         Returns:
             DataFrame: Resultant factor after reduction.
         """
+        self.counter += 1
         return factor[factor[node] == fixed_state]
     
     def product(self, factors, elim_node=None):
@@ -167,6 +168,7 @@ class VariableElimination:
             prob_cols = ["prob_x", "prob_y"]
             output["prob"] = output[prob_cols[0]] * output[prob_cols[1]]
             output = output.drop(prob_cols, axis=1)
+            self.counter += 1
 
         return output
 
@@ -207,6 +209,7 @@ class VariableElimination:
                 # If all variables are processed, calculate the marginal probability for the combination
                 for i, col in enumerate(columns):
                     factor = factor[(factor[col] == combination[i])]
+                    self.counter += 1
                 marginalize_row = combination.copy()
                 marginalize_row.append(factor["prob"].sum())
                 columns.append("prob")
@@ -223,6 +226,7 @@ class VariableElimination:
                     combination.append(value)
                     generate_marginal_combinations(factor.copy(), marginalize_factor, index + 1, combination.copy())
                     combination.pop()
+                    self.counter += 1
 
         generate_marginal_combinations(factor.copy(), marginalize_factor, 0, [])
         return pd.concat(marginalize_factors)
